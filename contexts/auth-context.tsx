@@ -84,6 +84,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event)
+
       if (event === 'SIGNED_IN' && session?.user) {
         setUser(session.user)
         const userProfile = await fetchProfile(session.user.id)
@@ -91,6 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (event === 'SIGNED_OUT') {
         setUser(null)
         setProfile(null)
+        // Redirect will be handled by window.location in signOut function
       } else if (event === 'TOKEN_REFRESHED' && session?.user) {
         setUser(session.user)
       }
@@ -151,16 +154,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
+    try {
+      const { error } = await supabase.auth.signOut()
 
-    if (error) {
-      throw parseSupabaseError(error)
+      if (error) {
+        throw parseSupabaseError(error)
+      }
+
+      // Clear state immediately
+      setUser(null)
+      setProfile(null)
+
+      // Force navigation to login page
+      window.location.href = '/auth/login'
+    } catch (error) {
+      console.error('Sign out error:', error)
+      throw error
     }
-
-    setUser(null)
-    setProfile(null)
-    router.push('/auth/login')
-    router.refresh()
   }
 
   const refreshProfile = async () => {
