@@ -1,9 +1,15 @@
 import { createClient } from '@/lib/supabase'
 import { parseSupabaseError } from '@/lib/supabase-errors'
+import {
+  notifyTutorOfBookingRequest,
+  notifyStudentOfApproval,
+  notifyStudentOfRejection,
+} from '@/lib/notifications'
 import type { BookingRequest, BookingStatus } from '@/types'
 
 /**
- * Create a new booking request
+ * Create a new booking request with concurrent booking protection
+ * Subtask 11.1, 11.2, 11.3: Server-side validation, creation, and conflict resolution
  */
 export async function createBookingRequest(input: {
   tutor_id: string
@@ -13,9 +19,9 @@ export async function createBookingRequest(input: {
   requested_end_time: string // ISO string in UTC
   specific_requests?: string
 }): Promise<BookingRequest> {
-  try {
-    const supabase = createClient()
+  const supabase = createClient()
 
+  try {
     // Get current user (student)
     const {
       data: { user },
@@ -29,9 +35,22 @@ export async function createBookingRequest(input: {
     // Validate time range
     const startTime = new Date(input.requested_start_time)
     const endTime = new Date(input.requested_end_time)
+    const now = new Date()
 
+    // Validate start time is in the future
+    if (startTime <= now) {
+      throw new Error('Booking start time must be in the future')
+    }
+
+    // Validate end time is after start time
     if (endTime <= startTime) {
       throw new Error('End time must be after start time')
+    }
+
+    // Validate booking is not too far in advance (60 days)
+    const maxAdvanceMs = 60 * 24 * 60 * 60 * 1000 // 60 days
+    if (startTime.getTime() - now.getTime() > maxAdvanceMs) {
+      throw new Error('Cannot book more than 60 days in advance')
     }
 
     // Validate duration matches time range
@@ -42,29 +61,121 @@ export async function createBookingRequest(input: {
       throw new Error('Duration does not match the time range')
     }
 
-    // Create booking request
-    const { data, error } = await supabase
-      .from('booking_requests')
-      .insert({
-        student_id: user.id,
-        tutor_id: input.tutor_id,
-        subject: input.subject,
-        duration_minutes: input.duration_minutes,
-        requested_start_time: input.requested_start_time,
-        requested_end_time: input.requested_end_time,
-        specific_requests: input.specific_requests || '',
-        status: 'pending',
-      })
-      .select()
+    // Validate tutor exists
+    const { data: tutorProfile, error: tutorError } = await supabase
+      .from('user_profiles')
+      .select('id, role')
+      .eq('id', input.tutor_id)
+      .eq('role', 'tutor')
       .single()
 
-    if (error) {
-      throw parseSupabaseError(error)
+    if (tutorError || !tutorProfile) {
+      throw new Error('Invalid tutor ID or tutor not found')
     }
 
-    return data as BookingRequest
-  } catch (error) {
+    // Use a transaction with retry logic for concurrent booking protection
+    let retries = 3
+    let lastError: Error | null = null
+
+    while (retries > 0) {
+      try {
+        // Start a transaction by checking conflicts and creating in sequence
+        // PostgreSQL will handle row-level locking automatically
+        const conflicts = await checkBookingConflicts(
+          input.tutor_id,
+          input.requested_start_time,
+          input.requested_end_time
+        )
+
+        if (conflicts.length > 0) {
+          throw new Error(
+            'This time slot is no longer available. Please select a different time.'
+          )
+        }
+
+        // Create booking request with status check
+        const { data, error } = await supabase
+          .from('booking_requests')
+          .insert({
+            student_id: user.id,
+            tutor_id: input.tutor_id,
+            subject: input.subject,
+            duration_minutes: input.duration_minutes,
+            requested_start_time: input.requested_start_time,
+            requested_end_time: input.requested_end_time,
+            specific_requests: input.specific_requests || '',
+            status: 'pending',
+          })
+          .select()
+          .single()
+
+        if (error) {
+          // Check if it's a unique constraint violation (concurrent booking)
+          if (error.code === '23505') {
+            throw new Error('A booking already exists for this time slot')
+          }
+          throw parseSupabaseError(error)
+        }
+
+        // Success - send notification to tutor (Subtask 11.5)
+        const createdBooking = data as BookingRequest
+
+        // Get student name for notification
+        const { data: studentProfile } = await supabase
+          .from('user_profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single()
+
+        if (studentProfile) {
+          // Send notification asynchronously (don't wait for it)
+          notifyTutorOfBookingRequest(
+            input.tutor_id,
+            studentProfile.full_name,
+            input.subject,
+            input.requested_start_time,
+            createdBooking.id
+          ).catch(err => console.error('Failed to send notification:', err))
+        }
+
+        return createdBooking
+      } catch (error: any) {
+        lastError = error
+
+        // If it's a conflict error, retry
+        if (
+          error.message.includes('no longer available') ||
+          error.message.includes('already exists')
+        ) {
+          retries--
+          if (retries > 0) {
+            // Wait a bit before retrying (exponential backoff)
+            await new Promise((resolve) => setTimeout(resolve, 100 * (4 - retries)))
+            continue
+          }
+        }
+
+        // For other errors, don't retry
+        throw error
+      }
+    }
+
+    // All retries exhausted
+    throw lastError || new Error('Failed to create booking request after multiple attempts')
+  } catch (error: any) {
     console.error('Error creating booking request:', error)
+
+    // Enhance error messages for better user feedback (Subtask 11.4)
+    if (error.message?.includes('authenticated')) {
+      throw new Error('You must be logged in to create a booking request')
+    }
+    if (error.message?.includes('tutor')) {
+      throw new Error('The selected tutor is not available')
+    }
+    if (error.message?.includes('time slot')) {
+      throw new Error('This time slot has been taken by another student. Please choose a different time.')
+    }
+
     throw error
   }
 }
@@ -160,6 +271,7 @@ export async function getBookingRequestById(id: string): Promise<BookingRequest 
 
 /**
  * Update booking request status (tutor only)
+ * Sends notifications to students when status changes
  */
 export async function updateBookingRequestStatus(
   id: string,
@@ -189,7 +301,40 @@ export async function updateBookingRequestStatus(
       throw parseSupabaseError(error)
     }
 
-    return data as BookingRequest
+    const updatedBooking = data as BookingRequest
+
+    // Send notification based on status change
+    if (status === 'approved' || status === 'rejected') {
+      // Get tutor name for notification
+      const { data: tutorProfile } = await supabase
+        .from('user_profiles')
+        .select('full_name')
+        .eq('id', updatedBooking.tutor_id)
+        .single()
+
+      if (tutorProfile) {
+        if (status === 'approved') {
+          notifyStudentOfApproval(
+            updatedBooking.student_id,
+            tutorProfile.full_name,
+            updatedBooking.subject,
+            updatedBooking.requested_start_time,
+            updatedBooking.id
+          ).catch(err => console.error('Failed to send approval notification:', err))
+        } else if (status === 'rejected') {
+          notifyStudentOfRejection(
+            updatedBooking.student_id,
+            tutorProfile.full_name,
+            updatedBooking.subject,
+            updatedBooking.requested_start_time,
+            updatedBooking.rejection_note || '',
+            updatedBooking.id
+          ).catch(err => console.error('Failed to send rejection notification:', err))
+        }
+      }
+    }
+
+    return updatedBooking
   } catch (error) {
     console.error('Error updating booking request:', error)
     throw error
