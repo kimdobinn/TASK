@@ -111,7 +111,9 @@ export function BlockedTimeForm({
   // Check for conflicts when times change
   useEffect(() => {
     if (!startDate || !startTime || !endDate || !endTime || !user?.id) {
-      setConflicts([])
+      if (conflicts.length > 0) {
+        setConflicts([])
+      }
       return
     }
 
@@ -136,7 +138,7 @@ export function BlockedTimeForm({
 
     const debounce = setTimeout(checkConflicts, 500)
     return () => clearTimeout(debounce)
-  }, [startDate, startTime, endDate, endTime, user?.id, existingBlockedTime?.id, toUTC, userTimeZone])
+  }, [startDate, startTime, endDate, endTime, user?.id, existingBlockedTime?.id])
 
   const toggleDayOfWeek = (day: number) => {
     setDaysOfWeek((prev) =>
