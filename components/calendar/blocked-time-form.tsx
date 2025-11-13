@@ -69,44 +69,48 @@ export function BlockedTimeForm({
 
   // Initialize form with values
   useEffect(() => {
-    if (isOpen) {
-      setError(null)
-      setConflicts([])
+    if (!isOpen) return
 
-      if (existingBlockedTime) {
-        // Edit mode - load existing blocked time
-        const start = fromUTC(existingBlockedTime.start_time, userTimeZone)
-        const end = fromUTC(existingBlockedTime.end_time, userTimeZone)
+    setError(null)
+    setConflicts([])
 
-        setStartDate(format(start, DATE_FORMATS.DATE))
-        setStartTime(format(start, DATE_FORMATS.TIME_24))
-        setEndDate(format(end, DATE_FORMATS.DATE))
-        setEndTime(format(end, DATE_FORMATS.TIME_24))
-        setIsRecurring(existingBlockedTime.is_recurring)
+    if (existingBlockedTime) {
+      // Edit mode - load existing blocked time
+      const start = fromUTC(existingBlockedTime.start_time, userTimeZone)
+      const end = fromUTC(existingBlockedTime.end_time, userTimeZone)
 
-        if (existingBlockedTime.recurrence_pattern) {
-          const pattern = existingBlockedTime.recurrence_pattern
-          setFrequency(pattern.frequency)
-          setInterval(pattern.interval?.toString() || '1')
-          setDaysOfWeek(pattern.days_of_week || [])
-          setRecurrenceEndDate(
-            pattern.end_date ? format(new Date(pattern.end_date), DATE_FORMATS.DATE) : ''
-          )
-        }
-      } else if (initialStart && initialEnd) {
-        // Create mode - use initial selection
-        setStartDate(format(initialStart, DATE_FORMATS.DATE))
-        setStartTime(format(initialStart, DATE_FORMATS.TIME_24))
-        setEndDate(format(initialEnd, DATE_FORMATS.DATE))
-        setEndTime(format(initialEnd, DATE_FORMATS.TIME_24))
-        setIsRecurring(false)
-        setFrequency('weekly')
-        setInterval('1')
-        setDaysOfWeek([])
-        setRecurrenceEndDate('')
+      setStartDate(format(start, DATE_FORMATS.DATE))
+      setStartTime(format(start, DATE_FORMATS.TIME_24))
+      setEndDate(format(end, DATE_FORMATS.DATE))
+      setEndTime(format(end, DATE_FORMATS.TIME_24))
+      setIsRecurring(existingBlockedTime.is_recurring)
+
+      if (existingBlockedTime.recurrence_pattern) {
+        const pattern = existingBlockedTime.recurrence_pattern
+        setFrequency(pattern.frequency)
+        setInterval(pattern.interval?.toString() || '1')
+        setDaysOfWeek(pattern.days_of_week || [])
+        setRecurrenceEndDate(
+          pattern.end_date ? format(new Date(pattern.end_date), DATE_FORMATS.DATE) : ''
+        )
       }
+    } else if (initialStart && initialEnd) {
+      // Create mode - use initial selection
+      const startTime = initialStart.getTime()
+      const endTime = initialEnd.getTime()
+
+      setStartDate(format(initialStart, DATE_FORMATS.DATE))
+      setStartTime(format(initialStart, DATE_FORMATS.TIME_24))
+      setEndDate(format(initialEnd, DATE_FORMATS.DATE))
+      setEndTime(format(initialEnd, DATE_FORMATS.TIME_24))
+      setIsRecurring(false)
+      setFrequency('weekly')
+      setInterval('1')
+      setDaysOfWeek([])
+      setRecurrenceEndDate('')
     }
-  }, [isOpen, existingBlockedTime, initialStart, initialEnd, fromUTC, userTimeZone, format, DATE_FORMATS])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, existingBlockedTime?.id, initialStart?.getTime(), initialEnd?.getTime()])
 
   // Check for conflicts when times change
   useEffect(() => {
