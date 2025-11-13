@@ -79,10 +79,10 @@ export function BlockedTimeForm({
       const start = fromUTC(existingBlockedTime.start_time, userTimeZone)
       const end = fromUTC(existingBlockedTime.end_time, userTimeZone)
 
-      setStartDate(format(start, DATE_FORMATS.DATE))
-      setStartTime(format(start, DATE_FORMATS.TIME_24))
-      setEndDate(format(end, DATE_FORMATS.DATE))
-      setEndTime(format(end, DATE_FORMATS.TIME_24))
+      setStartDate(format(start, DATE_FORMATS.ISO_DATE))
+      setStartTime(format(start, DATE_FORMATS.TIME_24H))
+      setEndDate(format(end, DATE_FORMATS.ISO_DATE))
+      setEndTime(format(end, DATE_FORMATS.TIME_24H))
       setIsRecurring(existingBlockedTime.is_recurring)
 
       if (existingBlockedTime.recurrence_pattern) {
@@ -91,7 +91,7 @@ export function BlockedTimeForm({
         setInterval(pattern.interval?.toString() || '1')
         setDaysOfWeek(pattern.days_of_week || [])
         setRecurrenceEndDate(
-          pattern.end_date ? format(new Date(pattern.end_date), DATE_FORMATS.DATE) : ''
+          pattern.end_date ? format(new Date(pattern.end_date), DATE_FORMATS.ISO_DATE) : ''
         )
       }
     } else if (initialStart && initialEnd) {
@@ -99,10 +99,10 @@ export function BlockedTimeForm({
       const startTime = initialStart.getTime()
       const endTime = initialEnd.getTime()
 
-      setStartDate(format(initialStart, DATE_FORMATS.DATE))
-      setStartTime(format(initialStart, DATE_FORMATS.TIME_24))
-      setEndDate(format(initialEnd, DATE_FORMATS.DATE))
-      setEndTime(format(initialEnd, DATE_FORMATS.TIME_24))
+      setStartDate(format(initialStart, DATE_FORMATS.ISO_DATE))
+      setStartTime(format(initialStart, DATE_FORMATS.TIME_24H))
+      setEndDate(format(initialEnd, DATE_FORMATS.ISO_DATE))
+      setEndTime(format(initialEnd, DATE_FORMATS.TIME_24H))
       setIsRecurring(false)
       setFrequency('weekly')
       setInterval('1')

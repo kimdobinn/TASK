@@ -156,7 +156,7 @@ export default function TutorAvailabilityPage() {
           onSuccess={handleFormSuccess}
           initialStart={selectedSlot?.start}
           initialEnd={selectedSlot?.end}
-          existingBlockedTime={actionMode === 'edit' ? selectedBlockedTime : undefined}
+          existingBlockedTime={actionMode === 'edit' && selectedBlockedTime ? selectedBlockedTime : undefined}
         />
 
         {/* Delete Confirmation Dialog */}
