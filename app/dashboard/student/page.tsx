@@ -14,6 +14,15 @@ import {
 function StudentDashboardContent() {
   const { profile, signOut } = useAuth()
 
+  const handleSignOut = async () => {
+    try {
+      console.log('Sign out clicked')
+      await signOut()
+    } catch (error) {
+      console.error('Sign out failed:', error)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       <div className="container mx-auto p-6 space-y-6">
@@ -24,7 +33,11 @@ function StudentDashboardContent() {
               Welcome back, {profile?.full_name}!
             </p>
           </div>
-          <Button onClick={() => signOut()} variant="outline">
+          <Button
+            onClick={handleSignOut}
+            variant="outline"
+            type="button"
+          >
             Sign out
           </Button>
         </div>
