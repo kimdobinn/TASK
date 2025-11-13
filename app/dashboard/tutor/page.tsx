@@ -74,7 +74,7 @@ function TutorDashboardContent() {
             <CardContent>
               <div className="space-y-2 text-sm">
                 <p>
-                  <span className="font-medium">Email:</span> {profile?.id}
+                  <span className="font-medium">Name:</span> {profile?.full_name}
                 </p>
                 <p>
                   <span className="font-medium">Role:</span> {profile?.role}
