@@ -5,7 +5,6 @@ export interface TutorProfile {
   id: string
   full_name: string
   time_zone: string
-  email: string
 }
 
 /**
@@ -17,7 +16,7 @@ export async function getTutors(): Promise<TutorProfile[]> {
 
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('id, full_name, time_zone, email')
+      .select('id, full_name, time_zone')
       .eq('role', 'tutor')
       .order('full_name')
 
@@ -41,7 +40,7 @@ export async function getTutorById(id: string): Promise<TutorProfile | null> {
 
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('id, full_name, time_zone, email')
+      .select('id, full_name, time_zone')
       .eq('id', id)
       .eq('role', 'tutor')
       .single()
