@@ -211,7 +211,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -219,7 +219,7 @@
             "description": "Design comprehensive security model and plan RLS policies for all user roles and access patterns",
             "dependencies": [],
             "details": "Analyze user roles (students, tutors, public), define access patterns for each table, create security matrix mapping roles to operations, design policy hierarchy and inheritance patterns, document security requirements and constraints",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Review security model with stakeholders, validate against business requirements, and ensure all access scenarios are covered"
           },
           {
@@ -230,7 +230,7 @@
               1
             ],
             "details": "Enable RLS on users/profiles table, create policy allowing authenticated users to SELECT and UPDATE only their own profile records using auth.uid(), implement proper error handling for unauthorized access attempts",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with different user contexts to ensure users can only access their own profiles and cannot view or modify other users' data"
           },
           {
@@ -241,7 +241,7 @@
               1
             ],
             "details": "Enable RLS on booking_requests table, create INSERT policy for authenticated students, create SELECT policy allowing students to view only their own booking requests, ensure proper user identification through auth.uid() matching",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test booking request creation and retrieval with student accounts, verify students cannot see other students' requests"
           },
           {
@@ -252,7 +252,7 @@
               1
             ],
             "details": "Create SELECT policy for tutors to view all booking_requests, implement UPDATE policy allowing tutors to modify status and related fields, add role-based filtering using user metadata or role tables, ensure tutors cannot modify student-only fields",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with tutor accounts to verify they can see all requests and update statuses, ensure they cannot modify restricted fields"
           },
           {
@@ -263,7 +263,7 @@
               1
             ],
             "details": "Enable RLS on blocked_times table, create full CRUD policies for tutors on their own blocked times, implement public SELECT policy for availability checking, ensure proper tutor ownership validation through foreign keys",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test tutor blocked times management, verify public can read for availability checks, ensure tutors cannot modify other tutors' blocked times"
           },
           {
@@ -277,7 +277,7 @@
               5
             ],
             "details": "Create policies for JOIN operations across tables, implement cascading access rules for related data, handle foreign key relationships in policy logic, ensure consistent access control across table boundaries, optimize policy performance",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test complex queries involving multiple tables, verify relationship-based access control works correctly, and test performance with large datasets"
           },
           {
@@ -292,7 +292,7 @@
               6
             ],
             "details": "Create test scenarios for each user role, test unauthorized access attempts, verify policy enforcement under various conditions, test edge cases like user role changes, perform security penetration testing, document test results and security validation",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Execute comprehensive test suite covering all user roles, attempt unauthorized operations, verify all policies block inappropriate access, and validate legitimate operations work correctly"
           }
         ]
@@ -1739,7 +1739,7 @@
     ],
     "metadata": {
       "created": "2025-11-13T03:25:04.088Z",
-      "updated": "2025-11-13T03:55:28.665Z",
+      "updated": "2025-11-13T04:00:58.147Z",
       "description": "Tasks for master context"
     }
   }
