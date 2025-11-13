@@ -1,0 +1,493 @@
+<context>
+# Overview
+Class Scheduler is a tutoring session booking platform that connects students with a tutor (you) for personalized learning sessions. The platform streamlines the booking process by allowing students to browse available time slots, request sessions for specific subjects, and communicate their learning needs. The tutor maintains control over availability and can approve or reject booking requests based on their schedule.
+
+The platform solves the inefficiency of back-and-forth communication for scheduling tutoring sessions, provides a centralized dashboard for both parties to manage bookings, and sends automated email notifications to keep everyone informed of booking status changes.
+
+# Core Features
+
+## 1. Authentication System
+- Email-based authentication with role differentiation (student vs tutor)
+- Users can sign up with email and password
+- Role is assigned during registration (student or tutor)
+- Secure session management and protected routes based on roles
+- WHY: Essential for identifying users and controlling access to role-specific features
+- HOW: Using Supabase Auth with custom user metadata for roles
+
+## 2. Availability Management (Tutor Only)
+- By default, all time slots are available for booking
+- Tutor can block out specific date/time ranges when unavailable
+- Visual calendar interface showing blocked and available times
+- Support for recurring blocked times (e.g., every Monday 9am-5pm)
+- Ability to edit or remove blocked time slots
+- WHY: Gives tutor full control over their schedule without manually creating available slots
+- HOW: Store blocked time ranges in database, calculate availability by excluding blocked times
+
+## 3. Session Booking (Students)
+- Browse calendar view of available time slots across multiple time zones
+- Create booking request with:
+  * Subject/topic selection (e.g., Math, Physics, Chemistry, etc.)
+  * Session duration (30 minutes, 1 hour, or 2 hours)
+  * Specific requests field (free text for topics, chapters, learning goals)
+  * Preferred date and time with time zone selection
+- View booking status (pending, approved, rejected)
+- WHY: Empowers students to request sessions that fit their learning needs and schedule
+- HOW: Form-based booking creation with calendar picker and dropdown selections
+
+## 4. Booking Management (Tutor)
+- Dashboard showing all booking requests with status filters
+- View detailed information for each booking request:
+  * Student name and contact
+  * Requested date/time (converted to tutor's time zone)
+  * Subject and duration
+  * Student's specific requests/topics
+- Accept or reject booking requests with one click
+- Optional: Add notes when rejecting (e.g., reason for rejection)
+- WHY: Centralized interface for managing incoming requests efficiently
+- HOW: Database queries filtered by status, actions update booking status
+
+## 5. Email Notifications
+- Automated emails sent for:
+  * New booking request submitted (to tutor)
+  * Booking request approved (to student)
+  * Booking request rejected (to student)
+  * Upcoming session reminder (to both, 24 hours before)
+- Emails include relevant booking details and dashboard links
+- WHY: Keeps both parties informed without requiring constant dashboard checking
+- HOW: Supabase Edge Functions triggered by database changes and scheduled tasks
+
+## 6. Dashboard Views
+### Student Dashboard:
+- Upcoming approved sessions with countdown
+- Pending requests awaiting tutor response
+- Past sessions history
+- Quick action: "Request New Session" button
+
+### Tutor Dashboard:
+- Pending requests requiring action (with count badge)
+- Upcoming approved sessions schedule
+- Calendar view of availability with blocked times
+- Quick actions: "Block Time", "View All Requests"
+
+WHY: Role-specific dashboards provide relevant information at a glance
+HOW: Different dashboard components rendered based on user role
+
+## 7. Time Zone Support
+- System detects and stores user's time zone on signup
+- All times displayed in user's local time zone
+- Time zone selector in booking form for international students
+- Database stores all times in UTC for consistency
+- WHY: Enables international students to book without confusion
+- HOW: Use date-fns-tz or similar library for conversions, store UTC in database
+
+# User Experience
+
+## User Personas
+
+### Persona 1: Sarah (Student)
+- University student studying Computer Science
+- Needs help with specific exam topics
+- Prefers evening sessions after classes
+- Values clear communication and quick booking confirmation
+
+### Persona 2: You (Tutor)
+- Experienced tutor offering sessions in multiple subjects
+- Manages varying weekly availability
+- Needs to quickly review and approve relevant booking requests
+- Values efficiency and reducing administrative overhead
+
+## Key User Flows
+
+### Flow 1: Student Books a Session
+1. Student logs into their dashboard
+2. Clicks "Request New Session" or navigates to booking page
+3. Views calendar with available time slots (blocked times excluded)
+4. Selects desired date and time
+5. Chooses subject from dropdown (Math, Physics, Chemistry, etc.)
+6. Selects session duration (30min, 1hr, 2hr)
+7. Enters specific requests in text field (topics, chapters, goals)
+8. Submits booking request
+9. Sees confirmation message and pending status on dashboard
+10. Receives email notification when tutor responds
+
+### Flow 2: Tutor Manages Availability
+1. Tutor logs into dashboard
+2. Navigates to availability management section
+3. Views calendar with existing blocked times
+4. Clicks date/time range to block
+5. Optionally sets as recurring block
+6. Saves blocked time
+7. Calendar updates to show blocked time
+8. Students can no longer request those blocked slots
+
+### Flow 3: Tutor Reviews and Approves Booking
+1. Tutor receives email notification of new booking request
+2. Logs into dashboard
+3. Sees pending requests badge with count
+4. Clicks to view booking details
+5. Reviews student info, subject, duration, and specific requests
+6. Clicks "Approve" or "Reject"
+7. If rejecting, optionally adds note
+8. Booking status updates
+9. Student receives email notification
+10. Approved session appears in both dashboards' upcoming sessions
+
+## UI/UX Considerations
+- Clean, modern interface using Shadcn UI components with custom theme
+- Mobile-responsive design for on-the-go access
+- Loading states for async operations
+- Success/error toast notifications for user actions
+- Accessible color contrast and keyboard navigation
+- Clear visual distinction between pending, approved, and rejected bookings
+- Intuitive calendar interface for date/time selection
+</context>
+
+<PRD>
+# Technical Architecture
+
+## System Components
+
+### Frontend (Next.js 16 + React 19)
+- **App Router**: File-based routing in `app/` directory
+- **Components**: Shadcn UI with custom theme (Slate base color, New York variant)
+- **State Management**: React hooks + Supabase realtime subscriptions
+- **Styling**: Tailwind CSS v4 with CSS variables for theming
+- **Icons**: Lucide React
+- **Date/Time**: date-fns with date-fns-tz for time zone handling
+- **Forms**: React Hook Form with Zod validation
+- **Calendar UI**: Custom calendar component or shadcn calendar
+
+### Backend (Supabase)
+- **Authentication**: Supabase Auth with email/password
+- **Database**: PostgreSQL with Row Level Security (RLS)
+- **Edge Functions**: Email notifications triggered by database webhooks
+- **Storage**: Profile images (optional future enhancement)
+- **Realtime**: Subscribe to booking status changes for live dashboard updates
+
+### Deployment (Vercel)
+- **Platform**: Vercel for Next.js hosting
+- **Environment Variables**: Supabase keys and URLs
+- **Domain**: Custom domain or Vercel subdomain
+- **Analytics**: Vercel Analytics (optional)
+
+## Data Models
+
+### users (Supabase Auth extended)
+```sql
+- id (uuid, primary key)
+- email (text, unique)
+- role (enum: 'student' | 'tutor')
+- full_name (text)
+- time_zone (text)
+- created_at (timestamp)
+```
+
+### blocked_times
+```sql
+- id (uuid, primary key)
+- tutor_id (uuid, foreign key to users)
+- start_time (timestamptz)
+- end_time (timestamptz)
+- is_recurring (boolean)
+- recurrence_pattern (jsonb, nullable) -- for future recurring logic
+- created_at (timestamp)
+```
+
+### booking_requests
+```sql
+- id (uuid, primary key)
+- student_id (uuid, foreign key to users)
+- tutor_id (uuid, foreign key to users)
+- subject (text)
+- duration_minutes (integer: 30, 60, or 120)
+- requested_start_time (timestamptz)
+- requested_end_time (timestamptz)
+- specific_requests (text)
+- status (enum: 'pending' | 'approved' | 'rejected')
+- rejection_note (text, nullable)
+- created_at (timestamp)
+- updated_at (timestamp)
+```
+
+### subjects (Optional: for dropdown options)
+```sql
+- id (uuid, primary key)
+- name (text)
+- is_active (boolean)
+- created_at (timestamp)
+```
+
+## APIs and Integrations
+
+### Supabase Client (Frontend)
+- Authentication methods: signUp, signIn, signOut
+- Database queries: Select, insert, update with RLS
+- Realtime subscriptions: Listen to booking_requests changes
+
+### Supabase Edge Functions
+1. **send-booking-notification**: Triggered on new booking_requests insert
+   - Sends email to tutor with booking details
+
+2. **send-status-update-notification**: Triggered on booking_requests update
+   - Sends approval/rejection email to student
+
+3. **send-reminder-notification**: Scheduled function (cron job)
+   - Runs daily at specific time
+   - Queries approved bookings within next 24 hours
+   - Sends reminder emails to both student and tutor
+
+### Email Templates
+- HTML email templates with booking details
+- Includes links back to dashboard
+- Responsive email design
+
+## Infrastructure Requirements
+
+### Environment Variables
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key (for Edge Functions)
+```
+
+### Database Setup
+- Enable Row Level Security on all tables
+- RLS policies:
+  * Users can read their own profile
+  * Students can insert booking_requests
+  * Students can read their own booking_requests
+  * Tutor can read all booking_requests
+  * Tutor can update booking_requests status
+  * Tutor can insert/update/delete blocked_times
+  * Public can check availability (read blocked_times)
+
+### Supabase Edge Function Configuration
+- Deploy functions: send-booking-notification, send-status-update-notification, send-reminder-notification
+- Set up database webhooks for insert/update on booking_requests
+- Configure cron job for reminder-notification
+
+# Development Roadmap
+
+## Phase 0: Foundation Setup
+- Install and configure required dependencies
+  * Supabase JS client
+  * date-fns and date-fns-tz
+  * React Hook Form and Zod
+  * Additional Shadcn UI components
+- Set up Supabase project
+  * Create database tables with RLS policies
+  * Configure authentication settings
+- Configure custom theme for Shadcn UI
+- Set up environment variables
+- Create basic layout and navigation structure
+
+## Phase 1: Authentication & User Management
+- Implement sign-up page with role selection
+- Implement sign-in page
+- Create user profile table and RLS policies
+- Implement protected routes based on role
+- Create basic dashboard layout for both roles
+- Add sign-out functionality
+- Set up middleware for authentication checks
+
+## Phase 2: Availability Management (Tutor Features)
+- Design and implement blocked_times table
+- Create availability management page
+- Build calendar component showing blocked times
+- Implement block time creation form
+- Add edit/delete functionality for blocked times
+- Create API utilities for availability checks
+- Test availability calculation logic
+
+## Phase 3: Booking System (Student Features)
+- Design and implement booking_requests table
+- Create booking request form
+  * Calendar picker for date selection
+  * Time slot selector
+  * Subject dropdown
+  * Duration selector (30min, 1hr, 2hr)
+  * Specific requests text area
+- Implement time zone selector and conversion
+- Add availability check before booking submission
+- Create booking request submission logic
+- Build student booking history view
+- Display booking status on student dashboard
+
+## Phase 4: Booking Management (Tutor Features)
+- Create tutor booking requests dashboard
+- Implement filtering by status (pending, approved, rejected)
+- Build detailed booking view modal/page
+- Add approve/reject actions with API calls
+- Implement optional rejection notes
+- Display upcoming sessions on tutor dashboard
+- Add pending requests count badge
+
+## Phase 5: Email Notifications
+- Set up Supabase Edge Functions project structure
+- Create send-booking-notification function
+  * Trigger on booking_requests insert
+  * Design HTML email template
+  * Include booking details and dashboard link
+- Create send-status-update-notification function
+  * Trigger on booking_requests status update
+  * Different templates for approval vs rejection
+- Create send-reminder-notification function
+  * Set up cron schedule
+  * Query upcoming sessions
+  * Send reminders to both parties
+- Test all notification triggers
+- Deploy Edge Functions to Supabase
+
+## Phase 6: Real-time Updates & Polish
+- Implement Supabase realtime subscriptions
+  * Student dashboard: Listen for status changes
+  * Tutor dashboard: Listen for new booking requests
+- Add loading states and skeletons
+- Implement error handling and user-friendly error messages
+- Add toast notifications for user actions
+- Ensure mobile responsiveness across all pages
+- Optimize performance (lazy loading, code splitting)
+- Add form validation feedback
+- Implement accessibility improvements (ARIA labels, keyboard nav)
+
+## Phase 7: Testing & Deployment
+- Test all user flows end-to-end
+- Test time zone conversions thoroughly
+- Test email notifications across different scenarios
+- Test RLS policies with different user roles
+- Fix any bugs discovered during testing
+- Set up Vercel project
+- Configure environment variables in Vercel
+- Deploy to Vercel
+- Test production deployment
+- Set up custom domain (optional)
+
+## Future Enhancements (Post-MVP)
+- Payment integration for session fees
+- Recurring booking requests
+- Video call integration (Zoom, Google Meet)
+- Session notes and materials upload
+- Rating and review system
+- Analytics dashboard for tutor
+- Multi-language support
+- Mobile app (React Native)
+- Cancellation and rescheduling flow
+- Automated availability suggestions based on tutor schedule
+
+# Logical Dependency Chain
+
+1. **Foundation First**: Environment setup, Supabase configuration, and base Next.js structure must be completed before any features
+2. **Authentication Before Everything**: User authentication is the foundation - no other features work without it
+3. **Database Schema Next**: All tables and RLS policies must be defined before implementing features that depend on them
+4. **Tutor Availability Before Student Booking**: Students need to see available slots, so blocked_times system must exist first
+5. **Booking Creation Before Management**: Students create bookings before tutors can manage them
+6. **Core CRUD Before Real-time**: Basic create, read, update functionality must work before adding real-time subscriptions
+7. **Core Features Before Notifications**: Email notifications are enhancements to existing functionality
+8. **MVP Complete Before Polish**: All core features working before optimizing performance and UX details
+9. **Testing Throughout**: Write tests alongside each feature, not just at the end
+10. **Deploy Incrementally**: Deploy phases as they complete to verify production behavior early
+
+# Risks and Mitigations
+
+## Technical Challenges
+
+### Risk: Time Zone Conversion Complexity
+- **Impact**: Students and tutor see different times, causing confusion or missed sessions
+- **Mitigation**:
+  * Store all times in UTC in database
+  * Use date-fns-tz for reliable conversions
+  * Display user's time zone prominently in UI
+  * Add comprehensive tests for time zone edge cases
+
+### Risk: Supabase Edge Functions Email Delivery
+- **Impact**: Notifications not received, users unaware of booking status
+- **Mitigation**:
+  * Test email delivery thoroughly in development
+  * Implement retry logic for failed sends
+  * Log all email attempts for debugging
+  * Add in-app notifications as backup
+  * Consider using Resend or SendGrid as fallback if Supabase proves unreliable
+
+### Risk: Real-time Subscription Performance
+- **Impact**: Dashboard doesn't update in real-time or causes performance issues
+- **Mitigation**:
+  * Implement proper subscription cleanup on unmount
+  * Use filters to only subscribe to relevant changes
+  * Add loading states while subscriptions establish
+  * Fallback to polling if real-time fails
+
+### Risk: RLS Policy Complexity
+- **Impact**: Security vulnerabilities or users seeing data they shouldn't
+- **Mitigation**:
+  * Write comprehensive RLS policies from the start
+  * Test with different user roles rigorously
+  * Use Supabase's policy testing tools
+  * Document all policies clearly
+
+## MVP Scope Management
+
+### Risk: Feature Creep
+- **Impact**: Project takes too long, MVP never ships
+- **Mitigation**:
+  * Strictly follow phased roadmap
+  * Mark future enhancements clearly and resist implementing early
+  * Get MVP working end-to-end before any polish
+  * Use Taskmaster to track progress and maintain focus
+
+### Risk: Over-Engineering
+- **Impact**: Spending time on abstractions or optimizations not needed for MVP
+- **Mitigation**:
+  * Start with simple, working implementations
+  * Optimize only when there's a proven need
+  * Prefer Shadcn UI defaults over custom components initially
+  * Use Supabase client directly before adding abstraction layers
+
+## Resource Constraints
+
+### Risk: Single Tutor Platform Scalability
+- **Impact**: Platform designed only for one tutor, can't scale to multiple tutors
+- **Mitigation**:
+  * Design database schema to support multiple tutors from the start (tutor_id foreign keys)
+  * Even if UI only shows one tutor initially, architecture supports expansion
+  * Keep tutor role checks flexible for future multi-tutor support
+
+### Risk: API Rate Limits (Supabase Free Tier)
+- **Impact**: Service unavailable during testing or early usage
+- **Mitigation**:
+  * Monitor Supabase dashboard for usage metrics
+  * Implement caching for frequently accessed data
+  * Optimize queries to reduce database calls
+  * Plan for paid tier upgrade if needed
+
+# Appendix
+
+## Technology Stack Summary
+- **Frontend Framework**: Next.js 16 (App Router)
+- **UI Library**: React 19
+- **Component Library**: Shadcn UI (New York variant, Slate base color)
+- **Styling**: Tailwind CSS v4
+- **Backend/Database**: Supabase (PostgreSQL, Auth, Edge Functions)
+- **Date Handling**: date-fns, date-fns-tz
+- **Form Management**: React Hook Form + Zod
+- **Icons**: Lucide React
+- **Deployment**: Vercel
+- **Version Control**: Git + GitHub
+
+## Key Implementation Notes
+- All database queries must respect RLS policies
+- All times stored as UTC timestamptz in database
+- User role stored in Supabase Auth user metadata
+- Booking request status enum: pending, approved, rejected
+- Session durations: 30, 60, 120 minutes (hardcoded options)
+- Default availability: All times available unless explicitly blocked
+- Email notifications: Triggered by database changes via Edge Functions
+
+## Subjects/Topics (Initial List)
+- Mathematics
+- Physics
+- Chemistry
+- Biology
+- Computer Science
+- English
+- Other (with text input)
+</PRD>

@@ -1,0 +1,1746 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Project Foundation Setup",
+        "description": "Initialize Next.js 16 project with required dependencies and basic configuration",
+        "details": "Create new Next.js 16 project using App Router. Install dependencies: @supabase/supabase-js, date-fns, date-fns-tz, react-hook-form, @hookform/resolvers, zod, lucide-react, tailwindcss v4. Initialize Shadcn UI with New York variant and Slate base color. Set up basic folder structure in app/ directory with components/, lib/, and types/ folders.",
+        "testStrategy": "Verify project builds successfully, all dependencies install without conflicts, and basic Next.js app renders correctly",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Next.js 16 Project with App Router",
+            "description": "Create a new Next.js 16 project using the App Router architecture and verify basic setup",
+            "dependencies": [],
+            "details": "Run 'npx create-next-app@latest' with Next.js 16, enable App Router, TypeScript, ESLint, and Tailwind CSS. Verify the project structure includes app/ directory instead of pages/. Test that the development server starts successfully and displays the default Next.js welcome page.",
+            "status": "pending",
+            "testStrategy": "Start development server with 'npm run dev', verify app loads at localhost:3000, and confirm App Router structure is present"
+          },
+          {
+            "id": 2,
+            "title": "Install and Configure Project Dependencies",
+            "description": "Install all required dependencies with proper version management and resolve any conflicts",
+            "dependencies": [
+              1
+            ],
+            "details": "Install dependencies: @supabase/supabase-js, date-fns, date-fns-tz, react-hook-form, @hookform/resolvers, zod, lucide-react, and tailwindcss v4. Verify package.json contains correct versions and run 'npm install' to ensure no dependency conflicts. Update package-lock.json and verify all packages install successfully.",
+            "status": "pending",
+            "testStrategy": "Run 'npm install' without errors, verify all dependencies in package.json, and test import statements for key packages"
+          },
+          {
+            "id": 3,
+            "title": "Setup Shadcn UI with New York Variant and Slate Theme",
+            "description": "Initialize Shadcn UI component library with specified design system configuration",
+            "dependencies": [
+              2
+            ],
+            "details": "Run 'npx shadcn-ui@latest init' and configure with New York variant and Slate base color. Set up components.json with proper paths pointing to app/ directory structure. Install initial components like Button and Card to verify setup. Configure Tailwind CSS to work with Shadcn UI classes and custom CSS variables.",
+            "status": "pending",
+            "testStrategy": "Verify components.json configuration, test importing and rendering a Shadcn component, and confirm theme colors are applied correctly"
+          },
+          {
+            "id": 4,
+            "title": "Create Folder Structure and TypeScript Configuration",
+            "description": "Establish organized project structure with proper TypeScript configuration for scalability",
+            "dependencies": [
+              3
+            ],
+            "details": "Create folder structure in app/ directory: components/ (with ui/ subfolder for Shadcn components), lib/ (for utilities and configurations), and types/ (for TypeScript definitions). Set up TypeScript configuration with proper path aliases (@/ for root, @/components, @/lib, @/types). Create index.ts files for clean imports and basic type definitions.",
+            "status": "pending",
+            "testStrategy": "Verify folder structure exists, test TypeScript path aliases work correctly, and confirm clean imports from created directories"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Supabase Project Configuration",
+        "description": "Set up Supabase project with authentication and initial configuration",
+        "details": "Create new Supabase project. Configure authentication settings to enable email/password auth. Set up environment variables: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY. Create Supabase client configuration in lib/supabase.ts with proper TypeScript types.",
+        "testStrategy": "Test Supabase client connection, verify environment variables are loaded correctly, and confirm authentication service is accessible",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Supabase Project and Initial Setup",
+            "description": "Create a new Supabase project and perform initial configuration setup",
+            "dependencies": [],
+            "details": "Sign up for Supabase account if needed, create new project with appropriate name and region selection. Note down project URL and API keys. Configure project settings including database timezone and basic security rules.",
+            "status": "pending",
+            "testStrategy": "Verify project creation by accessing Supabase dashboard and confirming project is active and accessible"
+          },
+          {
+            "id": 2,
+            "title": "Configure Authentication Providers",
+            "description": "Set up email/password authentication and configure auth settings in Supabase",
+            "dependencies": [
+              1
+            ],
+            "details": "Navigate to Authentication settings in Supabase dashboard. Enable email/password provider. Configure email templates for signup confirmation and password reset. Set up redirect URLs for authentication flows. Configure session timeout and security policies.",
+            "status": "pending",
+            "testStrategy": "Test authentication flow by creating a test user account and verifying email confirmation works"
+          },
+          {
+            "id": 3,
+            "title": "Environment Variables Setup and Security",
+            "description": "Configure environment variables with proper security practices for Supabase integration",
+            "dependencies": [
+              1
+            ],
+            "details": "Create .env.local file with NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, and SUPABASE_SERVICE_ROLE_KEY. Add .env.local to .gitignore. Create .env.example template. Document environment variable usage and security considerations. Set up different environments (development, staging, production).",
+            "status": "pending",
+            "testStrategy": "Verify environment variables are loaded correctly in Next.js application and confirm sensitive keys are not exposed in client-side code"
+          },
+          {
+            "id": 4,
+            "title": "TypeScript Client Configuration",
+            "description": "Create Supabase client configuration with proper TypeScript types and error handling",
+            "dependencies": [
+              3
+            ],
+            "details": "Create lib/supabase.ts file with createClient configuration. Set up TypeScript types for database schema. Implement proper error handling and connection management. Create separate clients for client-side and server-side usage. Add type definitions for auth and database operations.",
+            "status": "pending",
+            "testStrategy": "Test TypeScript compilation, verify client initialization, and confirm type safety for database operations"
+          },
+          {
+            "id": 5,
+            "title": "Connection Testing and Error Handling",
+            "description": "Implement comprehensive testing for Supabase connection and error handling mechanisms",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Create test utilities to verify Supabase client connection. Implement error handling for network failures, authentication errors, and API rate limits. Add connection retry logic and fallback mechanisms. Create health check endpoints for monitoring Supabase connectivity.",
+            "status": "pending",
+            "testStrategy": "Run connection tests in different network conditions, verify error handling works correctly, and confirm retry mechanisms function as expected"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Database Schema Creation",
+        "description": "Create all required database tables with proper relationships and constraints",
+        "details": "Execute SQL to create tables: users (extending auth.users), blocked_times, booking_requests, and subjects. Define proper foreign key relationships, constraints, and indexes. Set up enum types for user roles ('student', 'tutor') and booking status ('pending', 'approved', 'rejected'). Use timestamptz for all time fields.",
+        "testStrategy": "Verify all tables are created with correct schema, foreign key constraints work, and enum types are properly defined",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "User Table Extension Design",
+            "description": "Design and create user table extension that properly extends Supabase auth.users with additional fields for tutoring platform",
+            "dependencies": [],
+            "details": "Create users table that extends auth.users with fields like role (enum), profile information, availability preferences, and other user-specific data. Ensure proper relationship with auth.users table and handle user creation triggers.",
+            "status": "pending",
+            "testStrategy": "Verify user table creation, test auth.users relationship, validate enum constraints, and confirm trigger functionality"
+          },
+          {
+            "id": 2,
+            "title": "Booking and Blocked Times Table Creation",
+            "description": "Create booking_requests and blocked_times tables with proper structure and relationships",
+            "dependencies": [
+              1
+            ],
+            "details": "Design and implement booking_requests table with fields for student_id, tutor_id, subject_id, requested_time, status, and timestamps. Create blocked_times table for tutor availability blocking with tutor_id, start_time, end_time, and reason fields. Use timestamptz for all time fields.",
+            "status": "pending",
+            "testStrategy": "Test table creation, validate time field formats, verify proper data insertion and retrieval, and confirm timestamp handling"
+          },
+          {
+            "id": 3,
+            "title": "Subject and Enum Type Definitions",
+            "description": "Define subjects table and create enum types for user roles and booking status",
+            "dependencies": [],
+            "details": "Create subjects table with id, name, description, and category fields. Define enum types: user_role_enum ('student', 'tutor') and booking_status_enum ('pending', 'approved', 'rejected'). Ensure proper enum usage across related tables.",
+            "status": "pending",
+            "testStrategy": "Verify enum type creation, test enum value constraints, validate subjects table structure, and confirm enum usage in dependent tables"
+          },
+          {
+            "id": 4,
+            "title": "Foreign Key Relationship Establishment",
+            "description": "Establish all foreign key relationships between tables with proper constraints and cascading rules",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create foreign key constraints: users.id references auth.users.id, booking_requests.student_id/tutor_id reference users.id, booking_requests.subject_id references subjects.id, blocked_times.tutor_id references users.id. Set appropriate CASCADE and RESTRICT rules.",
+            "status": "pending",
+            "testStrategy": "Test foreign key constraint enforcement, verify cascading behavior, validate referential integrity, and confirm constraint violation handling"
+          },
+          {
+            "id": 5,
+            "title": "Index Optimization",
+            "description": "Create optimized indexes for query performance on frequently accessed columns and relationships",
+            "dependencies": [
+              4
+            ],
+            "details": "Create indexes on: users.role, booking_requests.tutor_id, booking_requests.student_id, booking_requests.status, booking_requests.requested_time, blocked_times.tutor_id, blocked_times.start_time/end_time range, and subjects.name. Consider composite indexes for common query patterns.",
+            "status": "pending",
+            "testStrategy": "Verify index creation, test query performance improvements, analyze execution plans, and confirm index usage in common queries"
+          },
+          {
+            "id": 6,
+            "title": "Constraint Validation Testing",
+            "description": "Comprehensive testing of all database constraints, relationships, and data integrity rules",
+            "dependencies": [
+              5
+            ],
+            "details": "Test all constraints: enum value validation, foreign key constraints, NOT NULL constraints, unique constraints, and check constraints. Verify data integrity across all tables, test edge cases, and confirm proper error handling for constraint violations.",
+            "status": "pending",
+            "testStrategy": "Execute comprehensive constraint testing scenarios, validate error messages, test boundary conditions, and confirm database integrity under various data manipulation operations"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Row Level Security Policies",
+        "description": "Implement comprehensive RLS policies for data security and access control",
+        "details": "Enable RLS on all tables. Create policies: users can read/update own profile; students can insert booking_requests and read own requests; tutors can read all booking_requests and update status; tutors can CRUD blocked_times; public can read blocked_times for availability checks. Test policies with different user contexts.",
+        "testStrategy": "Test each policy with different user roles, verify unauthorized access is blocked, and confirm legitimate operations work correctly",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Policy Planning and Security Model Design",
+            "description": "Design comprehensive security model and plan RLS policies for all user roles and access patterns",
+            "dependencies": [],
+            "details": "Analyze user roles (students, tutors, public), define access patterns for each table, create security matrix mapping roles to operations, design policy hierarchy and inheritance patterns, document security requirements and constraints",
+            "status": "pending",
+            "testStrategy": "Review security model with stakeholders, validate against business requirements, and ensure all access scenarios are covered"
+          },
+          {
+            "id": 2,
+            "title": "User Profile Access Policies",
+            "description": "Implement RLS policies for user profile table allowing users to read and update their own profiles",
+            "dependencies": [
+              1
+            ],
+            "details": "Enable RLS on users/profiles table, create policy allowing authenticated users to SELECT and UPDATE only their own profile records using auth.uid(), implement proper error handling for unauthorized access attempts",
+            "status": "pending",
+            "testStrategy": "Test with different user contexts to ensure users can only access their own profiles and cannot view or modify other users' data"
+          },
+          {
+            "id": 3,
+            "title": "Student Booking Request Policies",
+            "description": "Create RLS policies for students to insert new booking requests and read their own requests",
+            "dependencies": [
+              1
+            ],
+            "details": "Enable RLS on booking_requests table, create INSERT policy for authenticated students, create SELECT policy allowing students to view only their own booking requests, ensure proper user identification through auth.uid() matching",
+            "status": "pending",
+            "testStrategy": "Test booking request creation and retrieval with student accounts, verify students cannot see other students' requests"
+          },
+          {
+            "id": 4,
+            "title": "Tutor Management Policies",
+            "description": "Implement RLS policies allowing tutors to read all booking requests and update status fields",
+            "dependencies": [
+              1
+            ],
+            "details": "Create SELECT policy for tutors to view all booking_requests, implement UPDATE policy allowing tutors to modify status and related fields, add role-based filtering using user metadata or role tables, ensure tutors cannot modify student-only fields",
+            "status": "pending",
+            "testStrategy": "Test with tutor accounts to verify they can see all requests and update statuses, ensure they cannot modify restricted fields"
+          },
+          {
+            "id": 5,
+            "title": "Blocked Times Access Control",
+            "description": "Create RLS policies for blocked_times table with tutor CRUD access and public read access",
+            "dependencies": [
+              1
+            ],
+            "details": "Enable RLS on blocked_times table, create full CRUD policies for tutors on their own blocked times, implement public SELECT policy for availability checking, ensure proper tutor ownership validation through foreign keys",
+            "status": "pending",
+            "testStrategy": "Test tutor blocked times management, verify public can read for availability checks, ensure tutors cannot modify other tutors' blocked times"
+          },
+          {
+            "id": 6,
+            "title": "Cross-table Relationship Policies",
+            "description": "Implement RLS policies handling relationships between tables and complex access patterns",
+            "dependencies": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Create policies for JOIN operations across tables, implement cascading access rules for related data, handle foreign key relationships in policy logic, ensure consistent access control across table boundaries, optimize policy performance",
+            "status": "pending",
+            "testStrategy": "Test complex queries involving multiple tables, verify relationship-based access control works correctly, and test performance with large datasets"
+          },
+          {
+            "id": 7,
+            "title": "Comprehensive Security Testing",
+            "description": "Conduct thorough testing of all RLS policies with different user contexts and edge cases",
+            "dependencies": [
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Create test scenarios for each user role, test unauthorized access attempts, verify policy enforcement under various conditions, test edge cases like user role changes, perform security penetration testing, document test results and security validation",
+            "status": "pending",
+            "testStrategy": "Execute comprehensive test suite covering all user roles, attempt unauthorized operations, verify all policies block inappropriate access, and validate legitimate operations work correctly"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Authentication System Implementation",
+        "description": "Build complete authentication flow with role-based access control",
+        "details": "Create sign-up page with role selection (student/tutor), sign-in page, and authentication context. Implement useAuth hook for managing auth state. Set up middleware for protected routes. Store user role in auth metadata. Create sign-out functionality and session management.",
+        "testStrategy": "Test sign-up with both roles, sign-in/sign-out flow, protected route access, and session persistence across browser refreshes",
+        "priority": "high",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Sign-up Flow with Role Selection",
+            "description": "Create user registration page with role selection between student and tutor",
+            "dependencies": [],
+            "details": "Build sign-up form with email, password, confirm password, and role selection dropdown. Integrate with Supabase auth.signUp() and store role in user metadata. Add form validation and error handling for duplicate emails and weak passwords.",
+            "status": "pending",
+            "testStrategy": "Test sign-up with both student and tutor roles, verify role is stored in metadata, test validation errors"
+          },
+          {
+            "id": 2,
+            "title": "Sign-in Page and Validation",
+            "description": "Implement user login functionality with proper validation and error handling",
+            "dependencies": [
+              1
+            ],
+            "details": "Create sign-in form with email and password fields. Integrate with Supabase auth.signInWithPassword(). Add client-side validation, loading states, and comprehensive error handling for invalid credentials, unverified emails, and network issues.",
+            "status": "pending",
+            "testStrategy": "Test valid/invalid credentials, unverified email scenarios, and network error handling"
+          },
+          {
+            "id": 3,
+            "title": "Authentication Context and State Management",
+            "description": "Build React context and useAuth hook for global authentication state management",
+            "dependencies": [
+              2
+            ],
+            "details": "Create AuthContext with user state, loading state, and auth methods. Implement useAuth hook with signUp, signIn, signOut functions. Handle auth state changes with Supabase onAuthStateChange listener. Manage user session persistence and automatic token refresh.",
+            "status": "pending",
+            "testStrategy": "Test auth state persistence across page refreshes, verify context updates on auth changes"
+          },
+          {
+            "id": 4,
+            "title": "Protected Route Middleware",
+            "description": "Implement middleware to protect routes based on authentication status",
+            "dependencies": [
+              3
+            ],
+            "details": "Create higher-order component or middleware to wrap protected pages. Check authentication status and redirect unauthenticated users to sign-in page. Handle loading states during auth verification. Store intended destination for post-login redirect.",
+            "status": "pending",
+            "testStrategy": "Test access to protected routes when authenticated/unauthenticated, verify redirect functionality"
+          },
+          {
+            "id": 5,
+            "title": "Session Management and Persistence",
+            "description": "Implement robust session handling with automatic refresh and persistence",
+            "dependencies": [
+              4
+            ],
+            "details": "Configure Supabase session persistence in localStorage. Implement automatic token refresh before expiration. Handle session expiry gracefully with user notification. Add sign-out functionality that clears all session data and redirects appropriately.",
+            "status": "pending",
+            "testStrategy": "Test session persistence across browser refreshes, verify automatic token refresh, test sign-out flow"
+          },
+          {
+            "id": 6,
+            "title": "Role-based Access Control Implementation",
+            "description": "Build system to control access based on user roles (student/tutor)",
+            "dependencies": [
+              5
+            ],
+            "details": "Create role-checking utilities and hooks. Implement route protection based on user roles. Build conditional rendering components for role-specific UI elements. Add role validation middleware for API routes. Handle role changes and permission updates.",
+            "status": "pending",
+            "testStrategy": "Test role-specific route access, verify UI elements show/hide based on roles, test API endpoint protection"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Base Layout and Navigation",
+        "description": "Create responsive layout structure with role-based navigation",
+        "details": "Build main layout component with header, navigation, and content areas. Implement responsive design using Tailwind CSS v4. Create navigation menu that shows different options based on user role (student vs tutor). Add user profile dropdown with sign-out option. Use Shadcn UI components for consistent styling.",
+        "testStrategy": "Test responsive behavior across device sizes, verify role-based navigation shows correct options, and confirm layout renders properly",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Responsive Layout Structure Design",
+            "description": "Create the main layout component with header, navigation, and content areas using responsive design principles",
+            "dependencies": [],
+            "details": "Build the core layout component with proper semantic HTML structure including header, main navigation area, and content container. Implement CSS Grid or Flexbox layout system for proper positioning. Ensure the layout adapts to different screen sizes and maintains proper spacing and proportions across devices.",
+            "status": "pending",
+            "testStrategy": "Test layout structure across different viewport sizes, verify proper spacing and alignment, and confirm semantic HTML structure"
+          },
+          {
+            "id": 2,
+            "title": "Role-Based Navigation Component",
+            "description": "Implement navigation menu that dynamically shows different options based on user role (student vs tutor)",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a navigation component that conditionally renders menu items based on the authenticated user's role. Students should see options like 'Book Session', 'My Bookings', while tutors see 'Manage Availability', 'Booking Requests'. Use Shadcn UI components for consistent styling and implement proper state management for role detection.",
+            "status": "pending",
+            "testStrategy": "Test navigation with different user roles, verify correct menu items appear for each role, and confirm navigation links work properly"
+          },
+          {
+            "id": 3,
+            "title": "User Profile Dropdown with Authentication Actions",
+            "description": "Create user profile dropdown menu with sign-out functionality and user information display",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement a dropdown component in the header that displays user avatar, name, and role. Include menu options for profile settings and sign-out action. Integrate with authentication system to handle logout functionality. Use Shadcn UI dropdown components and ensure proper accessibility with keyboard navigation and ARIA labels.",
+            "status": "pending",
+            "testStrategy": "Test dropdown functionality, verify sign-out works correctly, confirm user information displays properly, and test keyboard accessibility"
+          },
+          {
+            "id": 4,
+            "title": "Mobile-First Responsive Implementation with Tailwind CSS v4",
+            "description": "Implement mobile-first responsive design using Tailwind CSS v4 utilities and breakpoints",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Apply Tailwind CSS v4 responsive utilities to ensure the layout works seamlessly across all device sizes. Implement mobile-first approach with proper breakpoints for tablet and desktop. Optimize navigation for mobile with hamburger menu, ensure touch-friendly interactions, and verify proper spacing and typography scaling across devices.",
+            "status": "pending",
+            "testStrategy": "Test responsive behavior on mobile, tablet, and desktop devices, verify touch interactions work properly, and confirm layout maintains usability across all screen sizes"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Time Zone Utilities",
+        "description": "Implement comprehensive time zone handling and conversion utilities",
+        "details": "Create utility functions using date-fns-tz for time zone detection, conversion between UTC and local time, and formatting. Implement functions: detectUserTimeZone(), convertToUTC(), convertFromUTC(), formatInTimeZone(). Store user time zone in profile on signup. Handle edge cases like DST transitions.",
+        "testStrategy": "Test time zone conversions with various time zones, verify UTC storage and local display, and test DST transition handling",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "User Time Zone Detection and Storage",
+            "description": "Implement automatic time zone detection and store user preferences in profile",
+            "dependencies": [],
+            "details": "Create detectUserTimeZone() function using Intl.DateTimeFormat().resolvedOptions().timeZone. Add timezone field to user profiles table. Implement profile update on signup to store detected timezone. Add fallback to UTC if detection fails.",
+            "status": "pending",
+            "testStrategy": "Test timezone detection across different browsers and devices, verify profile storage, test fallback behavior"
+          },
+          {
+            "id": 2,
+            "title": "UTC Conversion Utility Functions",
+            "description": "Implement core UTC conversion functions using date-fns-tz library",
+            "dependencies": [
+              1
+            ],
+            "details": "Create convertToUTC() and convertFromUTC() functions using date-fns-tz zonedTimeToUtc and utcToZonedTime. Handle date parsing and validation. Add error handling for invalid dates or timezones. Export functions from utils/timezone.ts module.",
+            "status": "pending",
+            "testStrategy": "Test conversions with various timezones, verify accuracy with known date/time pairs, test error handling with invalid inputs"
+          },
+          {
+            "id": 3,
+            "title": "Local Time Display Formatting",
+            "description": "Implement formatInTimeZone function for consistent time display across the application",
+            "dependencies": [
+              2
+            ],
+            "details": "Create formatInTimeZone() function using date-fns-tz format and formatInTimeZone utilities. Support multiple format patterns (short, long, time-only, date-only). Add locale support for internationalization. Integrate with existing UI components for consistent formatting.",
+            "status": "pending",
+            "testStrategy": "Test formatting with different timezones and locales, verify format patterns work correctly, test integration with UI components"
+          },
+          {
+            "id": 4,
+            "title": "DST Transition Handling",
+            "description": "Implement robust handling of Daylight Saving Time transitions and edge cases",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Add DST transition detection using date-fns-tz. Handle ambiguous times during fall-back and non-existent times during spring-forward. Implement validation for booking times near DST transitions. Add warning messages for users when scheduling near DST changes.",
+            "status": "pending",
+            "testStrategy": "Test with specific DST transition dates, verify handling of ambiguous and non-existent times, test user warnings and validation"
+          },
+          {
+            "id": 5,
+            "title": "Comprehensive Time Zone Testing Suite",
+            "description": "Create extensive test suite covering multiple regions and edge cases",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Implement comprehensive Jest test suite covering major timezones (UTC, EST, PST, GMT, JST, AEST). Test DST transitions for multiple regions. Add integration tests with booking system. Create test data for various timezone scenarios and edge cases.",
+            "status": "pending",
+            "testStrategy": "Run tests across multiple timezone regions, verify DST handling for different countries, test integration with booking workflows"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Blocked Times Management System",
+        "description": "Build tutor interface for managing availability by blocking time slots",
+        "details": "Create blocked_times CRUD operations with Supabase client. Build calendar component showing blocked times visually. Implement form for creating blocked time ranges with date/time pickers. Add edit and delete functionality. Store times in UTC, display in tutor's local time zone.",
+        "testStrategy": "Test creating, editing, and deleting blocked times. Verify times are stored in UTC and displayed correctly in local time zone",
+        "priority": "high",
+        "dependencies": [
+          6,
+          7
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Blocked Times CRUD Operations with Supabase",
+            "description": "Implement complete CRUD operations for blocked times using Supabase client",
+            "dependencies": [],
+            "details": "Create blocked_times table operations including createBlockedTime, getBlockedTimes, updateBlockedTime, and deleteBlockedTime functions. Implement proper error handling and TypeScript types. Set up RLS policies to ensure tutors can only manage their own blocked times. Store all times in UTC format.",
+            "status": "pending",
+            "testStrategy": "Test all CRUD operations with various time ranges, verify RLS policies work correctly, and test error handling for invalid data"
+          },
+          {
+            "id": 2,
+            "title": "Calendar Visualization Component",
+            "description": "Build interactive calendar component to display blocked times visually",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a calendar component that displays blocked time slots as visual blocks on the calendar. Implement month/week/day views with proper styling for blocked periods. Add hover effects and click handlers for interaction. Ensure responsive design works on mobile devices.",
+            "status": "pending",
+            "testStrategy": "Test calendar rendering with various blocked time configurations, verify visual accuracy across different view modes, and test responsive behavior"
+          },
+          {
+            "id": 3,
+            "title": "Time Range Selection Form with Validation",
+            "description": "Create form interface for selecting and validating blocked time ranges",
+            "dependencies": [],
+            "details": "Build form with date and time pickers for start/end times. Implement validation to ensure end time is after start time, prevent past dates, and validate reasonable time ranges. Add recurring blocked time options (daily, weekly). Include form state management and error display.",
+            "status": "pending",
+            "testStrategy": "Test form validation rules, date/time picker functionality, recurring options, and error message display for invalid inputs"
+          },
+          {
+            "id": 4,
+            "title": "Edit and Delete Functionality",
+            "description": "Implement edit and delete operations for existing blocked times",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Add edit modal/form that pre-populates with existing blocked time data. Implement delete confirmation dialog with proper warning messages. Handle optimistic updates in the UI and rollback on errors. Update calendar view immediately after successful operations.",
+            "status": "pending",
+            "testStrategy": "Test edit form pre-population, delete confirmation flow, optimistic UI updates, and error rollback scenarios"
+          },
+          {
+            "id": 5,
+            "title": "Time Zone Conversion Integration",
+            "description": "Implement proper time zone handling for storing and displaying blocked times",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "Integrate time zone conversion utilities to store times in UTC and display in tutor's local time zone. Implement automatic time zone detection and manual override options. Handle daylight saving time transitions and edge cases. Add time zone display indicators in the UI.",
+            "status": "pending",
+            "testStrategy": "Test time zone conversion accuracy, daylight saving time handling, manual time zone override, and UTC storage verification"
+          },
+          {
+            "id": 6,
+            "title": "Conflict Detection Logic",
+            "description": "Implement logic to detect and prevent overlapping blocked time conflicts",
+            "dependencies": [
+              1,
+              5
+            ],
+            "details": "Create conflict detection algorithms to identify overlapping blocked times before saving. Implement merge suggestions for adjacent or overlapping periods. Add validation to prevent creating conflicting blocked times. Display conflict warnings and resolution options in the UI.",
+            "status": "pending",
+            "testStrategy": "Test conflict detection with various overlap scenarios, verify merge suggestions work correctly, and test conflict resolution user flows"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Availability Calculation Logic",
+        "description": "Implement logic to calculate available time slots excluding blocked times",
+        "details": "Create utility functions to calculate available time slots by excluding blocked times from default availability. Implement getAvailableSlots() function that takes date range and returns available 30-minute increments. Handle overlapping blocked times and edge cases. Cache results for performance.",
+        "testStrategy": "Test availability calculation with various blocked time scenarios, verify no conflicts with blocked times, and test performance with large datasets",
+        "priority": "high",
+        "dependencies": [
+          8
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Core Availability Algorithm Design",
+            "description": "Design and implement the foundational algorithm for calculating available time slots from base availability schedules",
+            "dependencies": [],
+            "details": "Create the core algorithm that processes base availability schedules and converts them into time slot arrays. Design data structures for representing availability windows, implement time range calculations, and establish the foundation for slot generation logic.",
+            "status": "pending",
+            "testStrategy": "Unit tests for time range calculations, availability window processing, and data structure validation"
+          },
+          {
+            "id": 2,
+            "title": "Blocked Time Exclusion Logic",
+            "description": "Implement logic to exclude blocked time periods from available slots",
+            "dependencies": [
+              1
+            ],
+            "details": "Create functions to process blocked time arrays and remove corresponding slots from available time windows. Handle different blocking scenarios including partial blocks, full day blocks, and recurring blocked times.",
+            "status": "pending",
+            "testStrategy": "Test various blocking scenarios including partial overlaps, full blocks, and edge cases with multiple blocked periods"
+          },
+          {
+            "id": 3,
+            "title": "Time Slot Generation and Validation",
+            "description": "Generate 30-minute time slot increments and validate slot boundaries",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement getAvailableSlots() function that generates 30-minute increments within available windows. Validate slot boundaries, ensure proper time formatting, and handle timezone considerations for slot generation.",
+            "status": "pending",
+            "testStrategy": "Test slot generation with different time ranges, validate 30-minute increments, and verify timezone handling"
+          },
+          {
+            "id": 4,
+            "title": "Overlap Detection and Resolution",
+            "description": "Implement sophisticated overlap detection and resolution for complex blocking scenarios",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create algorithms to detect and resolve overlapping blocked times, handle cascading blocks, and merge adjacent blocked periods. Implement conflict resolution logic for competing time constraints.",
+            "status": "pending",
+            "testStrategy": "Test complex overlap scenarios, verify conflict resolution accuracy, and validate merged blocking periods"
+          },
+          {
+            "id": 5,
+            "title": "Performance Optimization and Caching",
+            "description": "Implement caching mechanisms and performance optimizations for availability calculations",
+            "dependencies": [
+              4
+            ],
+            "details": "Add Redis or in-memory caching for calculated availability results. Implement cache invalidation strategies, optimize algorithm performance for large datasets, and add performance monitoring for availability calculations.",
+            "status": "pending",
+            "testStrategy": "Performance tests with large datasets, cache hit/miss ratio validation, and load testing for concurrent availability requests"
+          },
+          {
+            "id": 6,
+            "title": "Edge Case Handling for Complex Scenarios",
+            "description": "Handle edge cases and complex scenarios in availability calculations",
+            "dependencies": [
+              5
+            ],
+            "details": "Implement handling for edge cases including daylight saving time transitions, cross-midnight availability windows, holiday exclusions, and invalid date ranges. Add comprehensive error handling and fallback mechanisms.",
+            "status": "pending",
+            "testStrategy": "Test DST transitions, cross-midnight scenarios, holiday handling, and error recovery mechanisms"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Student Booking Request Form",
+        "description": "Build comprehensive booking request form for students",
+        "details": "Create booking form with React Hook Form and Zod validation. Include: calendar picker for date selection, time slot dropdown showing available times, subject dropdown (Math, Physics, Chemistry, etc.), duration selector (30min, 1hr, 2hr), specific requests textarea, and time zone selector. Validate availability before submission.",
+        "testStrategy": "Test form validation, availability checking, time zone conversion, and successful booking request submission",
+        "priority": "high",
+        "dependencies": [
+          9
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Form Structure and Validation Schema Design",
+            "description": "Design the overall form structure and create comprehensive Zod validation schemas for all form fields",
+            "dependencies": [],
+            "details": "Set up React Hook Form with TypeScript types and create Zod schemas for validating date selection, time slots, subject selection, duration, specific requests, and time zone. Define form state management and error handling patterns. Create reusable validation utilities for date/time constraints.",
+            "status": "pending",
+            "testStrategy": "Test all validation rules, error messages, form state updates, and edge cases for invalid inputs"
+          },
+          {
+            "id": 2,
+            "title": "Date and Time Selection Components",
+            "description": "Build calendar picker and time slot dropdown components with proper date/time handling",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement calendar picker component for date selection with disabled past dates and availability constraints. Create time slot dropdown that dynamically shows available times based on selected date. Handle time zone conversion and display times in user's local time zone while storing UTC internally.",
+            "status": "pending",
+            "testStrategy": "Test calendar navigation, date selection constraints, time slot filtering, and time zone conversion accuracy"
+          },
+          {
+            "id": 3,
+            "title": "Subject and Duration Selection Components",
+            "description": "Create dropdown components for subject selection and duration picker with proper validation",
+            "dependencies": [
+              1
+            ],
+            "details": "Build subject dropdown with predefined options (Math, Physics, Chemistry, etc.) and custom styling. Implement duration selector with options for 30min, 1hr, 2hr sessions. Add proper validation and error states. Ensure components integrate seamlessly with React Hook Form.",
+            "status": "pending",
+            "testStrategy": "Test subject selection, duration picker functionality, validation states, and form integration"
+          },
+          {
+            "id": 4,
+            "title": "Availability Integration and Real-time Validation",
+            "description": "Implement real-time availability checking and validation against tutor schedules and blocked times",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create availability checking service that queries tutor schedules and blocked times. Implement real-time validation that updates available time slots based on selected date, duration, and subject. Add loading states and error handling for availability checks. Prevent double-booking attempts.",
+            "status": "pending",
+            "testStrategy": "Test availability checking accuracy, real-time updates, loading states, and conflict prevention"
+          },
+          {
+            "id": 5,
+            "title": "Form Submission Handling",
+            "description": "Implement form submission logic with proper data formatting and API integration",
+            "dependencies": [
+              4
+            ],
+            "details": "Create form submission handler that formats all form data correctly, converts times to UTC, and calls booking request API. Implement proper error handling, loading states, and success feedback. Add form reset functionality and navigation after successful submission.",
+            "status": "pending",
+            "testStrategy": "Test form submission flow, data formatting, error handling, success states, and API integration"
+          },
+          {
+            "id": 6,
+            "title": "User Experience Optimization",
+            "description": "Enhance form UX with loading states, progress indicators, and accessibility improvements",
+            "dependencies": [
+              5
+            ],
+            "details": "Add loading spinners, progress indicators, and smooth transitions between form steps. Implement proper accessibility features including ARIA labels, keyboard navigation, and screen reader support. Add helpful tooltips and validation feedback. Optimize form layout for mobile devices.",
+            "status": "pending",
+            "testStrategy": "Test accessibility compliance, mobile responsiveness, loading states, and overall user experience flow"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Booking Request Submission Logic",
+        "description": "Implement backend logic for creating and storing booking requests",
+        "details": "Create API functions for booking request submission. Validate availability server-side before creating request. Store booking with student_id, tutor_id, requested times in UTC, subject, duration, and specific requests. Set initial status to 'pending'. Handle concurrent booking attempts for same time slot.",
+        "testStrategy": "Test booking creation, server-side availability validation, concurrent booking handling, and proper data storage",
+        "priority": "high",
+        "dependencies": [
+          10
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Server-side Validation and Availability Checking",
+            "description": "Implement comprehensive server-side validation for booking requests and real-time availability checking",
+            "dependencies": [],
+            "details": "Create API endpoint to validate booking request data including student_id, tutor_id, requested times in UTC, subject, and duration. Implement availability checking logic that queries existing bookings and tutor schedules to prevent double-booking. Add validation for business rules like minimum booking duration, maximum advance booking time, and tutor working hours.",
+            "status": "pending",
+            "testStrategy": "Test validation with invalid data, availability checking with existing bookings, edge cases like timezone boundaries, and performance with concurrent requests"
+          },
+          {
+            "id": 2,
+            "title": "Booking Request Creation and Data Storage",
+            "description": "Implement the core booking request creation logic and database storage functionality",
+            "dependencies": [
+              1
+            ],
+            "details": "Create database functions to insert new booking requests with all required fields: student_id, tutor_id, requested_start_time, requested_end_time (UTC), subject, duration, specific_requests, and initial status 'pending'. Implement proper error handling for database constraints and foreign key relationships. Add created_at and updated_at timestamps.",
+            "status": "pending",
+            "testStrategy": "Test successful booking creation, database constraint validation, proper UTC time storage, and data integrity checks"
+          },
+          {
+            "id": 3,
+            "title": "Concurrent Booking Conflict Resolution",
+            "description": "Implement race condition handling for simultaneous booking attempts on the same time slot",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement database-level locking mechanisms using PostgreSQL advisory locks or row-level locking to prevent concurrent bookings for the same tutor time slot. Create atomic transaction handling that checks availability and creates booking in a single transaction. Add retry logic for failed attempts due to conflicts.",
+            "status": "pending",
+            "testStrategy": "Test concurrent booking attempts using multiple simultaneous requests, verify only one booking succeeds, test lock timeout handling, and validate transaction rollback on conflicts"
+          },
+          {
+            "id": 4,
+            "title": "Error Handling and User Feedback",
+            "description": "Implement comprehensive error handling and user-friendly feedback system for booking submission",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create structured error responses for different failure scenarios: validation errors, availability conflicts, database errors, and system failures. Implement proper HTTP status codes and error messages. Add logging for debugging and monitoring. Create user-friendly error messages that guide users on how to resolve issues.",
+            "status": "pending",
+            "testStrategy": "Test various error scenarios, verify appropriate error messages are returned, test error logging functionality, and validate user experience with different failure modes"
+          },
+          {
+            "id": 5,
+            "title": "Integration with Notification System",
+            "description": "Integrate booking submission with notification system to alert tutors of new requests",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Implement notification triggers that fire when new booking requests are created successfully. Send immediate notifications to tutors via email and in-app notifications. Include booking details like student name, subject, requested time, and duration. Add notification preferences handling and ensure notifications are sent asynchronously to avoid blocking the booking creation process.",
+            "status": "pending",
+            "testStrategy": "Test notification delivery after successful booking creation, verify notification content accuracy, test notification failure handling, and validate asynchronous processing"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Student Dashboard Implementation",
+        "description": "Build student dashboard showing booking history and status",
+        "details": "Create student dashboard with sections for: upcoming approved sessions with countdown timers, pending requests awaiting tutor response, past sessions history, and prominent 'Request New Session' button. Display booking details including subject, time (in student's time zone), and status. Use Shadcn UI components for consistent styling.",
+        "testStrategy": "Test dashboard data loading, status filtering, time zone display, and navigation to booking form",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Dashboard Layout and Booking Status Sections",
+            "description": "Create the main dashboard layout with distinct sections for different booking statuses",
+            "dependencies": [],
+            "details": "Design and implement the overall dashboard layout using Shadcn UI components. Create separate sections for upcoming approved sessions, pending requests, and past sessions history. Include a prominent 'Request New Session' button. Ensure responsive design and consistent styling across all sections.",
+            "status": "pending",
+            "testStrategy": "Test responsive layout on different screen sizes, verify section visibility and styling consistency"
+          },
+          {
+            "id": 2,
+            "title": "Upcoming Sessions with Countdown Timers",
+            "description": "Implement upcoming sessions display with real-time countdown functionality",
+            "dependencies": [
+              1
+            ],
+            "details": "Create components to display upcoming approved sessions with countdown timers showing time remaining until session start. Display session details including subject, tutor name, duration, and time in student's time zone. Implement real-time timer updates using useEffect and setInterval. Handle timer completion states.",
+            "status": "pending",
+            "testStrategy": "Test countdown timer accuracy, real-time updates, time zone conversion, and timer behavior when session time passes"
+          },
+          {
+            "id": 3,
+            "title": "Booking History and Filtering System",
+            "description": "Build comprehensive booking history display with filtering and sorting capabilities",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement booking history section showing past sessions with details like date, subject, tutor, duration, and status. Add filtering options by subject, date range, and status. Include sorting functionality by date, subject, or status. Implement pagination for large datasets and search functionality.",
+            "status": "pending",
+            "testStrategy": "Test filtering by different criteria, sorting functionality, pagination performance, and search accuracy"
+          },
+          {
+            "id": 4,
+            "title": "Dashboard Data Fetching and State Management",
+            "description": "Implement comprehensive data fetching and state management for all dashboard sections",
+            "dependencies": [],
+            "details": "Create API functions to fetch student's booking data including upcoming sessions, pending requests, and booking history. Implement state management using React hooks or context for dashboard data. Handle loading states, error handling, and data refresh functionality. Ensure efficient data fetching with proper caching strategies.",
+            "status": "pending",
+            "testStrategy": "Test data loading performance, error handling, loading states, and data refresh functionality"
+          },
+          {
+            "id": 5,
+            "title": "Navigation Integration with Booking Form",
+            "description": "Integrate dashboard navigation with the booking request form and other system components",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Implement navigation from dashboard to booking request form via the 'Request New Session' button. Ensure proper routing and state management when navigating between dashboard and booking form. Handle return navigation with updated data after booking submission. Integrate with overall application navigation structure.",
+            "status": "pending",
+            "testStrategy": "Test navigation flow between dashboard and booking form, state persistence during navigation, and data refresh after booking submission"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Tutor Booking Management Dashboard",
+        "description": "Build tutor interface for reviewing and managing booking requests",
+        "details": "Create tutor dashboard showing: pending requests with count badge, detailed booking information (student name, subject, duration, specific requests), approve/reject actions, upcoming approved sessions, and filtering by status. Display times in tutor's time zone. Add optional rejection notes field.",
+        "testStrategy": "Test booking request display, filtering functionality, approve/reject actions, and proper time zone conversion",
+        "priority": "high",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Booking Request Display and Filtering Component",
+            "description": "Create the main booking request list component with filtering capabilities by status (pending, approved, rejected) and search functionality",
+            "dependencies": [],
+            "details": "Implement React component to display booking requests in a list/table format. Add filter dropdown for status selection and search input for student names. Include pagination for large datasets. Fetch data from booking_requests table with proper joins to get student information. Implement real-time updates using Supabase subscriptions.",
+            "status": "pending",
+            "testStrategy": "Test filtering by different statuses, search functionality, pagination, and real-time updates when new requests arrive"
+          },
+          {
+            "id": 2,
+            "title": "Detailed Booking Information Presentation",
+            "description": "Build detailed view component showing comprehensive booking information including student details, subject, duration, and specific requests",
+            "dependencies": [
+              1
+            ],
+            "details": "Create expandable or modal component to display full booking details. Show student name, profile picture, subject, requested duration, specific learning requests, preferred time slots, and any additional notes. Format information in a clean, readable layout with proper typography and spacing.",
+            "status": "pending",
+            "testStrategy": "Test detailed view rendering, data accuracy, responsive design, and proper formatting of all booking information fields"
+          },
+          {
+            "id": 3,
+            "title": "Approve/Reject Action Components",
+            "description": "Implement interactive buttons and forms for approving or rejecting booking requests with confirmation dialogs",
+            "dependencies": [
+              2
+            ],
+            "details": "Create approve and reject buttons with confirmation modals. For rejections, include optional textarea for rejection notes. Implement proper loading states and success/error feedback. Connect to booking status management API endpoints. Add keyboard shortcuts for quick actions.",
+            "status": "pending",
+            "testStrategy": "Test approve/reject actions, confirmation dialogs, rejection notes functionality, loading states, and proper API integration"
+          },
+          {
+            "id": 4,
+            "title": "Status Management Interface",
+            "description": "Build interface for managing and tracking booking request status changes with history and audit trail",
+            "dependencies": [
+              3
+            ],
+            "details": "Create status indicator badges and timeline component showing status change history. Display current status prominently with color coding (pending=yellow, approved=green, rejected=red). Show timestamps for status changes and who made the changes. Include bulk action capabilities for managing multiple requests.",
+            "status": "pending",
+            "testStrategy": "Test status indicators, history timeline, bulk actions, and proper status change tracking with timestamps"
+          },
+          {
+            "id": 5,
+            "title": "Time Zone Display Integration",
+            "description": "Implement time zone conversion and display system to show all booking times in tutor's local time zone",
+            "dependencies": [
+              4
+            ],
+            "details": "Integrate time zone detection and conversion using libraries like date-fns-tz or moment-timezone. Convert UTC timestamps from database to tutor's local time zone. Display times in readable format with time zone abbreviation. Add time zone selector in user preferences. Handle daylight saving time transitions properly.",
+            "status": "pending",
+            "testStrategy": "Test time zone conversion accuracy, daylight saving time handling, time zone selector functionality, and proper display formatting"
+          },
+          {
+            "id": 6,
+            "title": "Notification Badge Implementation",
+            "description": "Create notification badge system showing count of pending booking requests with real-time updates",
+            "dependencies": [
+              5
+            ],
+            "details": "Implement notification badge component displaying count of pending requests. Position badge on navigation menu or dashboard header. Use Supabase real-time subscriptions to update count automatically when new requests arrive or status changes. Add visual animations for count changes and proper accessibility attributes.",
+            "status": "pending",
+            "testStrategy": "Test badge count accuracy, real-time updates, visual animations, accessibility features, and proper positioning across different screen sizes"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Booking Status Management",
+        "description": "Implement approve/reject functionality for booking requests",
+        "details": "Create API endpoints for updating booking request status. Implement approve and reject actions with proper validation. Add optional rejection notes field. Update booking_requests table with new status and timestamp. Ensure only tutors can modify booking status through RLS policies.",
+        "testStrategy": "Test approve/reject functionality, rejection notes, status updates, and access control validation",
+        "priority": "high",
+        "dependencies": [
+          13
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create API endpoint for booking status updates",
+            "description": "Implement API endpoint to handle booking request status changes with proper validation",
+            "dependencies": [],
+            "details": "Create API route handler for PATCH /api/booking-requests/[id]/status. Accept status ('approved', 'rejected') and optional rejection_notes in request body. Validate request parameters and ensure proper error handling for invalid status transitions.",
+            "status": "pending",
+            "testStrategy": "Test endpoint with valid/invalid status values, verify proper error responses, and confirm request body validation"
+          },
+          {
+            "id": 2,
+            "title": "Implement approve action with business logic",
+            "description": "Create approve functionality with proper validation and database updates",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement approve action that validates tutor permissions, checks booking request exists and is in pending status, updates status to 'approved' with timestamp, and handles any conflicts with existing approved bookings for the same time slot.",
+            "status": "pending",
+            "testStrategy": "Test approve action with valid requests, verify status updates, timestamp recording, and conflict detection"
+          },
+          {
+            "id": 3,
+            "title": "Implement reject action with optional notes",
+            "description": "Create reject functionality including optional rejection notes field",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement reject action that validates tutor permissions, updates booking status to 'rejected' with timestamp, stores optional rejection_notes in database, and ensures proper data validation for notes field length and content.",
+            "status": "pending",
+            "testStrategy": "Test reject action with and without notes, verify notes storage, character limits, and proper status updates"
+          },
+          {
+            "id": 4,
+            "title": "Implement status change validation and security",
+            "description": "Add comprehensive validation and RLS policies for booking status management",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create RLS policies ensuring only tutors can modify booking status for their own requests. Implement validation for status transitions (only pending->approved/rejected allowed). Add server-side checks for tutor ownership and proper error handling for unauthorized access attempts.",
+            "status": "pending",
+            "testStrategy": "Test RLS policies with different user roles, verify unauthorized access is blocked, and validate status transition rules"
+          },
+          {
+            "id": 5,
+            "title": "Integrate with notification triggers",
+            "description": "Set up database triggers and notification system for status changes",
+            "dependencies": [
+              4
+            ],
+            "details": "Create database triggers that fire on booking_requests status updates. Implement notification logic to inform students when their booking requests are approved or rejected. Include rejection notes in rejection notifications and ensure proper error handling for notification failures.",
+            "status": "pending",
+            "testStrategy": "Test notification triggers for approve/reject actions, verify students receive appropriate notifications, and confirm rejection notes are included"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Supabase Edge Functions Setup",
+        "description": "Initialize Edge Functions project structure for email notifications",
+        "details": "Set up Supabase Edge Functions project structure. Create functions directory with TypeScript configuration. Install Deno dependencies for email sending. Set up shared utilities for email templates and database connections. Configure environment variables for Edge Functions.",
+        "testStrategy": "Verify Edge Functions project structure, test local development environment, and confirm Deno dependencies work correctly",
+        "priority": "medium",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Edge Functions Project Structure and TypeScript Configuration",
+            "description": "Set up the basic Supabase Edge Functions project structure with proper TypeScript configuration and build setup",
+            "dependencies": [
+              2
+            ],
+            "details": "Create supabase/functions directory structure. Initialize deno.json configuration file with TypeScript compiler options and import maps. Set up proper folder structure for individual functions. Configure TypeScript strict mode and module resolution for Deno runtime environment.",
+            "status": "pending",
+            "testStrategy": "Verify directory structure is created correctly, test TypeScript compilation works, and confirm deno.json configuration is valid"
+          },
+          {
+            "id": 2,
+            "title": "Install Deno Dependencies and Runtime Setup",
+            "description": "Configure Deno runtime environment and install necessary dependencies for email functionality",
+            "dependencies": [
+              1
+            ],
+            "details": "Install Deno runtime dependencies for email sending (SMTP client libraries). Set up import maps in deno.json for external dependencies. Configure Deno permissions and runtime flags. Install Supabase client libraries compatible with Deno edge runtime.",
+            "status": "pending",
+            "testStrategy": "Test Deno dependency resolution, verify SMTP libraries work in edge runtime, and confirm Supabase client connectivity"
+          },
+          {
+            "id": 3,
+            "title": "Create Shared Utilities and Template System",
+            "description": "Develop shared utility functions for database connections and email template management across Edge Functions",
+            "dependencies": [
+              2
+            ],
+            "details": "Create shared utilities in supabase/functions/_shared directory. Implement database connection helpers using Supabase client. Build email template system with dynamic content injection. Create utility functions for common operations like user lookups and booking data retrieval.",
+            "status": "pending",
+            "testStrategy": "Test shared utilities work across different functions, verify database connections, and confirm template system renders correctly"
+          },
+          {
+            "id": 4,
+            "title": "Configure Environment Variables for Edge Functions",
+            "description": "Set up environment variable configuration and secrets management for Edge Functions deployment",
+            "dependencies": [
+              3
+            ],
+            "details": "Configure environment variables in Supabase dashboard for Edge Functions. Set up secrets for SMTP credentials, database URLs, and API keys. Create local .env file for development. Implement environment variable validation and fallback handling in shared utilities.",
+            "status": "pending",
+            "testStrategy": "Verify environment variables are accessible in Edge Functions, test local development setup, and confirm production deployment configuration"
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Email Template System",
+        "description": "Create responsive HTML email templates for all notification types",
+        "details": "Design and implement HTML email templates for: new booking request notification (to tutor), booking approval notification (to student), booking rejection notification (to student), and session reminder (to both). Include booking details, dashboard links, and responsive design. Use inline CSS for email client compatibility.",
+        "testStrategy": "Test email templates across different email clients, verify responsive design, and confirm all dynamic content renders correctly",
+        "priority": "medium",
+        "dependencies": [
+          15
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Responsive HTML Template Structure Design",
+            "description": "Create the base responsive HTML email template structure with proper DOCTYPE, meta tags, and table-based layout for email client compatibility",
+            "dependencies": [],
+            "details": "Design a responsive HTML email template foundation using table-based layout for maximum email client compatibility. Include proper DOCTYPE declaration, viewport meta tags, and CSS reset. Create a flexible container structure that adapts to different screen sizes using media queries and inline CSS. Establish consistent typography, spacing, and color scheme variables.",
+            "status": "pending",
+            "testStrategy": "Test template structure across major email clients (Gmail, Outlook, Apple Mail) and verify responsive behavior on mobile and desktop"
+          },
+          {
+            "id": 2,
+            "title": "Booking Notification Template Creation",
+            "description": "Develop HTML email template for new booking request notifications sent to tutors with booking details and action buttons",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a comprehensive booking notification template that displays student information, requested session details (subject, date, time, duration), and clear call-to-action buttons for approval/rejection. Include booking ID, student profile link, and dashboard navigation. Use inline CSS for styling and ensure all dynamic content placeholders are properly formatted.",
+            "status": "pending",
+            "testStrategy": "Test with sample booking data, verify all dynamic fields render correctly, and confirm action buttons link to correct dashboard pages"
+          },
+          {
+            "id": 3,
+            "title": "Status Update Template Variations",
+            "description": "Create email templates for booking approval and rejection notifications sent to students with appropriate messaging and next steps",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop two distinct templates: booking approval notification with session confirmation details, tutor contact information, and preparation instructions; booking rejection notification with polite messaging, alternative suggestions, and rebooking options. Both templates should include booking reference numbers and dashboard links for further actions.",
+            "status": "pending",
+            "testStrategy": "Test both approval and rejection templates with various booking scenarios, verify appropriate tone and messaging, and confirm all links function correctly"
+          },
+          {
+            "id": 4,
+            "title": "Session Reminder Template",
+            "description": "Build session reminder email template for both students and tutors with session details, preparation checklist, and contact information",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a session reminder template that works for both user types with conditional content blocks. Include session details (date, time, duration, subject), meeting location/link, preparation checklist, emergency contact information, and rescheduling options. Add countdown timer styling and clear visual hierarchy for important information.",
+            "status": "pending",
+            "testStrategy": "Test reminder template for both student and tutor recipients, verify conditional content displays correctly, and confirm all session details are accurate"
+          },
+          {
+            "id": 5,
+            "title": "Cross-Client Compatibility Testing and Optimization",
+            "description": "Comprehensive testing and optimization of all email templates across different email clients and devices to ensure consistent rendering",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "details": "Test all email templates across major email clients (Gmail, Outlook 2016/2019/365, Apple Mail, Yahoo Mail, Thunderbird) and devices (desktop, mobile, tablet). Identify and fix rendering issues, optimize images for email delivery, validate HTML markup, and ensure fallback fonts work properly. Document any client-specific limitations and create optimization guidelines.",
+            "status": "pending",
+            "testStrategy": "Use email testing tools like Litmus or Email on Acid to test across multiple clients, verify image loading and fallbacks, and conduct manual testing on actual devices"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "New Booking Notification Function",
+        "description": "Implement Edge Function for notifying tutors of new booking requests",
+        "details": "Create send-booking-notification Edge Function triggered by booking_requests insert. Extract booking and student details, format email with template, and send to tutor. Include booking information, student details, and link to dashboard. Handle errors gracefully and log all attempts.",
+        "testStrategy": "Test function trigger on new bookings, verify email content and delivery, and test error handling scenarios",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Edge Function Trigger Setup and Database Integration",
+            "description": "Set up the Edge Function trigger mechanism for booking_requests table inserts and establish database connections",
+            "dependencies": [],
+            "details": "Create the send-booking-notification Edge Function in Supabase. Configure database trigger on booking_requests table for INSERT operations. Set up proper database connection using Supabase client with service role key. Ensure function is properly deployed and accessible.",
+            "status": "pending",
+            "testStrategy": "Test function deployment, verify trigger fires on new booking inserts, and confirm database connectivity"
+          },
+          {
+            "id": 2,
+            "title": "Booking Data Extraction and Formatting",
+            "description": "Implement logic to extract booking details and student information from the database",
+            "dependencies": [
+              1
+            ],
+            "details": "Query booking_requests table to get booking details including tutor_id, student_id, requested times, subject, and duration. Join with users table to fetch student name and contact information. Format the extracted data into structured objects for email template consumption.",
+            "status": "pending",
+            "testStrategy": "Test data extraction with various booking scenarios, verify all required fields are retrieved, and validate data formatting"
+          },
+          {
+            "id": 3,
+            "title": "Email Composition and Sending Logic",
+            "description": "Create email template and implement email sending functionality to notify tutors",
+            "dependencies": [
+              2
+            ],
+            "details": "Design HTML email template including booking information, student details, and dashboard link. Implement email sending using Supabase's email service or external provider. Include booking date/time, subject, student name, and direct link to tutor dashboard for booking management.",
+            "status": "pending",
+            "testStrategy": "Test email template rendering, verify all dynamic content is populated correctly, and confirm email delivery to tutors"
+          },
+          {
+            "id": 4,
+            "title": "Error Handling and Logging Implementation",
+            "description": "Implement comprehensive error handling and logging for the notification function",
+            "dependencies": [
+              3
+            ],
+            "details": "Add try-catch blocks around database queries and email sending operations. Implement proper error logging with detailed error messages and context. Add retry logic for transient failures. Log all notification attempts including success/failure status and timestamps for debugging and monitoring.",
+            "status": "pending",
+            "testStrategy": "Test error scenarios including database failures, email service outages, and invalid data conditions. Verify proper error logging and retry mechanisms"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Status Update Notification Function",
+        "description": "Implement Edge Function for notifying students of booking status changes",
+        "details": "Create send-status-update-notification Edge Function triggered by booking_requests status update. Send different emails for approval vs rejection. Include booking details, tutor notes (if rejected), and dashboard link. Only trigger for status changes to 'approved' or 'rejected'.",
+        "testStrategy": "Test function triggers on status updates, verify correct email templates are used, and confirm proper filtering of status changes",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Status Change Trigger Detection",
+            "description": "Implement database trigger to detect booking_requests status changes to 'approved' or 'rejected'",
+            "dependencies": [],
+            "details": "Create PostgreSQL trigger function that monitors booking_requests table for status column updates. Filter for only 'approved' and 'rejected' status changes. Trigger should capture old and new status values, booking ID, and timestamp. Set up Edge Function webhook invocation when trigger conditions are met.",
+            "status": "pending",
+            "testStrategy": "Test trigger fires only on approved/rejected status changes, verify webhook payload contains correct data, and confirm no triggers on other status values"
+          },
+          {
+            "id": 2,
+            "title": "Conditional Email Template Selection",
+            "description": "Create logic to select appropriate email template based on booking status (approval vs rejection)",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement conditional logic in Edge Function to select email templates. Create separate templates for approval and rejection notifications. Approval template should include congratulations message and next steps. Rejection template should include apology and space for tutor notes. Both templates should be responsive and branded.",
+            "status": "pending",
+            "testStrategy": "Test correct template selection for each status type, verify template rendering with sample data, and validate responsive design across email clients"
+          },
+          {
+            "id": 3,
+            "title": "Notification Content Personalization",
+            "description": "Personalize email content with booking details, student info, tutor notes, and dashboard links",
+            "dependencies": [
+              2
+            ],
+            "details": "Fetch booking details, student information, and tutor data from database. For rejections, include tutor notes if provided. Generate personalized dashboard links with booking reference. Include booking date, time, subject, and tutor name. Format content appropriately for each template type with proper escaping and validation.",
+            "status": "pending",
+            "testStrategy": "Test personalization with various booking scenarios, verify all dynamic content renders correctly, and validate dashboard links are properly generated"
+          },
+          {
+            "id": 4,
+            "title": "Delivery Confirmation and Error Handling",
+            "description": "Implement email delivery confirmation, retry logic, and comprehensive error handling",
+            "dependencies": [
+              3
+            ],
+            "details": "Add email delivery confirmation tracking using email service webhooks. Implement retry logic for failed deliveries with exponential backoff. Log all notification attempts with status and error details. Handle edge cases like invalid email addresses, service outages, and rate limits. Create fallback notification methods if primary delivery fails.",
+            "status": "pending",
+            "testStrategy": "Test delivery confirmation tracking, verify retry logic with simulated failures, validate error logging, and test fallback mechanisms"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Session Reminder Function",
+        "description": "Implement scheduled Edge Function for sending session reminders",
+        "details": "Create send-reminder-notification Edge Function with cron schedule (daily at specific time). Query approved bookings within next 24 hours, send reminder emails to both student and tutor. Include session details, time in recipient's time zone, and preparation suggestions.",
+        "testStrategy": "Test cron scheduling, query logic for upcoming sessions, email delivery to both parties, and time zone handling",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Cron Job Scheduling and Configuration",
+            "description": "Set up cron job scheduling for the session reminder Edge Function to run daily at a specific time",
+            "dependencies": [],
+            "details": "Configure cron schedule in the Edge Function to trigger daily execution at optimal time (e.g., 9 AM UTC). Set up proper error handling and logging for scheduled execution. Ensure the function can handle timezone-aware scheduling and configure retry mechanisms for failed executions.",
+            "status": "pending",
+            "testStrategy": "Test cron trigger execution, verify scheduled timing accuracy, and validate error handling for failed runs"
+          },
+          {
+            "id": 2,
+            "title": "Upcoming Session Query Logic",
+            "description": "Implement database query logic to fetch approved bookings within the next 24 hours",
+            "dependencies": [
+              1
+            ],
+            "details": "Create SQL query to fetch approved booking_requests with session_date within next 24 hours. Include joins to get student and tutor details, session information, and time zone data. Optimize query performance and handle edge cases like cancelled or rescheduled sessions.",
+            "status": "pending",
+            "testStrategy": "Test query accuracy with various time ranges, verify performance with large datasets, and validate correct filtering of approved bookings"
+          },
+          {
+            "id": 3,
+            "title": "Dual Recipient Email Sending",
+            "description": "Implement email sending functionality to both student and tutor with personalized content",
+            "dependencies": [
+              2
+            ],
+            "details": "Create email templates for both student and tutor reminders with session details, preparation suggestions, and personalized content. Implement dual sending logic to dispatch emails to both parties simultaneously. Include session information, meeting links, and role-specific preparation tips.",
+            "status": "pending",
+            "testStrategy": "Test email delivery to both recipients, verify template rendering with dynamic content, and validate email formatting across different clients"
+          },
+          {
+            "id": 4,
+            "title": "Time Zone-Aware Reminder Timing Optimization",
+            "description": "Implement time zone handling to display session times in each recipient's local time zone",
+            "dependencies": [
+              3
+            ],
+            "details": "Convert session times to recipient's local time zone using stored user timezone preferences. Implement timezone conversion utilities and format times appropriately in email content. Handle daylight saving time transitions and edge cases for different timezone formats.",
+            "status": "pending",
+            "testStrategy": "Test timezone conversion accuracy across different zones, verify DST handling, and validate time display formatting in emails"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Database Webhooks Configuration",
+        "description": "Set up database triggers to invoke Edge Functions on data changes",
+        "details": "Configure Supabase database webhooks to trigger Edge Functions: booking_requests insert triggers send-booking-notification, booking_requests status update triggers send-status-update-notification. Set up proper webhook URLs and authentication. Test webhook delivery and error handling.",
+        "testStrategy": "Test webhook triggers on database changes, verify function invocation, and confirm proper error handling and retries",
+        "priority": "medium",
+        "dependencies": [
+          17,
+          18
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Database Trigger Setup and Event Configuration",
+            "description": "Configure Supabase database triggers to automatically invoke Edge Functions when specific data changes occur in the booking_requests table",
+            "dependencies": [],
+            "details": "Create database triggers for booking_requests table: INSERT trigger to call send-booking-notification function and UPDATE trigger for status changes to call send-status-update-notification function. Configure trigger conditions to fire only on relevant events (new bookings and status updates to 'approved' or 'rejected'). Set up proper trigger timing (AFTER INSERT/UPDATE) and ensure triggers pass relevant row data as payload.",
+            "status": "pending",
+            "testStrategy": "Test triggers fire correctly on INSERT and UPDATE operations, verify correct function is called for each event type, and confirm proper payload data is passed"
+          },
+          {
+            "id": 2,
+            "title": "Webhook URL and Authentication Setup",
+            "description": "Configure webhook endpoints and authentication mechanisms for secure communication between database triggers and Edge Functions",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up webhook URLs pointing to the correct Edge Functions (send-booking-notification and send-status-update-notification). Configure authentication using Supabase service role key or JWT tokens to ensure secure function invocation. Set up proper headers and request format for webhook calls. Configure webhook secrets for payload verification and implement HMAC signature validation if required.",
+            "status": "pending",
+            "testStrategy": "Verify webhook URLs are accessible, test authentication mechanisms work correctly, and confirm secure payload transmission"
+          },
+          {
+            "id": 3,
+            "title": "Function Invocation Testing and Debugging",
+            "description": "Test the complete webhook flow from database changes to Edge Function execution and implement comprehensive debugging capabilities",
+            "dependencies": [
+              2
+            ],
+            "details": "Create test scenarios for both booking creation and status update events. Implement logging and monitoring for webhook invocations to track success/failure rates. Set up debugging tools to inspect webhook payloads, function execution logs, and response handling. Test edge cases like concurrent updates, malformed data, and network timeouts. Verify proper function execution with real database operations.",
+            "status": "pending",
+            "testStrategy": "Execute end-to-end tests with real database operations, monitor webhook delivery success rates, and verify proper function execution through logs and debugging tools"
+          },
+          {
+            "id": 4,
+            "title": "Error Handling and Retry Mechanism Implementation",
+            "description": "Implement robust error handling and retry mechanisms to ensure reliable webhook delivery and function execution",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement exponential backoff retry strategy for failed webhook calls with configurable retry limits (e.g., 3 attempts). Set up dead letter queue or error logging for permanently failed webhooks. Configure timeout handling for slow function responses. Implement circuit breaker pattern to prevent cascade failures. Set up monitoring and alerting for webhook failures and create fallback mechanisms for critical notifications.",
+            "status": "pending",
+            "testStrategy": "Test retry mechanisms with simulated failures, verify dead letter queue functionality, and confirm proper error logging and alerting systems work as expected"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "title": "Real-time Dashboard Updates",
+        "description": "Implement Supabase real-time subscriptions for live dashboard updates",
+        "details": "Add Supabase real-time subscriptions to dashboards: student dashboard listens for booking status changes, tutor dashboard listens for new booking requests. Implement proper subscription cleanup on component unmount. Add loading states during subscription establishment.",
+        "testStrategy": "Test real-time updates across multiple browser sessions, verify subscription cleanup, and test reconnection after network issues",
+        "priority": "medium",
+        "dependencies": [
+          12,
+          13
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Supabase Real-time Subscription Setup",
+            "description": "Configure Supabase real-time client and establish basic subscription infrastructure",
+            "dependencies": [],
+            "details": "Set up Supabase real-time client configuration, create utility functions for subscription management, and establish connection to Supabase real-time channels. Configure proper authentication for real-time subscriptions and create base subscription hooks.",
+            "status": "pending",
+            "testStrategy": "Test connection establishment, verify authentication works with real-time client, and confirm basic subscription functionality"
+          },
+          {
+            "id": 2,
+            "title": "Dashboard-specific Subscription Logic",
+            "description": "Implement specific real-time subscriptions for student and tutor dashboards",
+            "dependencies": [
+              1
+            ],
+            "details": "Create dashboard-specific subscription logic: student dashboard subscribes to booking status changes for their requests, tutor dashboard subscribes to new booking requests. Implement data filtering and transformation for each dashboard type.",
+            "status": "pending",
+            "testStrategy": "Test that student dashboard receives only their booking updates and tutor dashboard receives new booking requests in real-time"
+          },
+          {
+            "id": 3,
+            "title": "Subscription Lifecycle Management and Cleanup",
+            "description": "Implement proper subscription lifecycle management with cleanup on component unmount",
+            "dependencies": [
+              2
+            ],
+            "details": "Create subscription cleanup mechanisms using useEffect cleanup functions and component unmount handlers. Implement subscription state tracking to prevent memory leaks and ensure proper resource disposal when components are destroyed.",
+            "status": "pending",
+            "testStrategy": "Test that subscriptions are properly cleaned up when navigating away from dashboards and verify no memory leaks occur"
+          },
+          {
+            "id": 4,
+            "title": "Connection State Handling and Reconnection",
+            "description": "Implement connection state monitoring and automatic reconnection logic",
+            "dependencies": [
+              3
+            ],
+            "details": "Add connection state monitoring to track real-time connection status. Implement automatic reconnection logic for network interruptions, exponential backoff for failed connections, and user feedback for connection states (connected, disconnected, reconnecting).",
+            "status": "pending",
+            "testStrategy": "Test reconnection after network interruptions, verify connection state indicators work correctly, and test behavior during poor network conditions"
+          },
+          {
+            "id": 5,
+            "title": "Performance Optimization for Real-time Data",
+            "description": "Optimize real-time data handling for performance and user experience",
+            "dependencies": [
+              4
+            ],
+            "details": "Implement data debouncing to prevent excessive re-renders, add loading states during subscription establishment, optimize subscription queries to minimize data transfer, and implement efficient state updates to prevent unnecessary component re-renders.",
+            "status": "pending",
+            "testStrategy": "Test performance with multiple simultaneous updates, verify loading states display correctly, and measure subscription establishment time"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "title": "Form Validation and Error Handling",
+        "description": "Implement comprehensive validation and user-friendly error handling",
+        "details": "Add Zod schemas for all forms with proper validation rules. Implement error boundaries for React components. Add toast notifications for user actions using Shadcn UI toast component. Create user-friendly error messages for common scenarios (network errors, validation failures, etc.).",
+        "testStrategy": "Test form validation with invalid inputs, verify error messages are user-friendly, and test error boundary functionality",
+        "priority": "medium",
+        "dependencies": [
+          10,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Comprehensive Zod Validation Schemas",
+            "description": "Develop complete Zod schemas for all application forms with proper validation rules and type safety",
+            "dependencies": [],
+            "details": "Create Zod schemas for booking forms, user profile forms, and authentication forms. Include validation for email formats, phone numbers, date ranges, time slots, and required fields. Add custom validation messages and error handling for each schema field.",
+            "status": "pending",
+            "testStrategy": "Test all validation rules with valid and invalid inputs, verify custom error messages display correctly, and ensure type safety is maintained"
+          },
+          {
+            "id": 2,
+            "title": "Implement React Error Boundary Components",
+            "description": "Create error boundary components to catch and handle React component errors gracefully",
+            "dependencies": [],
+            "details": "Implement error boundary components using React's componentDidCatch lifecycle method or error boundary hooks. Create fallback UI components for different error scenarios. Add error logging and reporting functionality. Wrap key application sections with appropriate error boundaries.",
+            "status": "pending",
+            "testStrategy": "Simulate component errors to test error boundary functionality, verify fallback UI renders correctly, and test error logging mechanisms"
+          },
+          {
+            "id": 3,
+            "title": "Integrate Shadcn UI Toast Notification System",
+            "description": "Set up toast notification system using Shadcn UI components for user action feedback",
+            "dependencies": [],
+            "details": "Install and configure Shadcn UI toast component. Create toast provider and context for global toast management. Implement different toast variants (success, error, warning, info) with appropriate styling and animations. Add toast positioning and duration controls.",
+            "status": "pending",
+            "testStrategy": "Test different toast variants, verify positioning and animations work correctly, and test toast queue management with multiple notifications"
+          },
+          {
+            "id": 4,
+            "title": "Design User-Friendly Error Messages",
+            "description": "Create comprehensive error message system with clear, actionable feedback for users",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Design error message templates for common scenarios including network errors, validation failures, authentication issues, and server errors. Create error message mapping system that converts technical errors into user-friendly language. Implement contextual help and suggested actions for each error type.",
+            "status": "pending",
+            "testStrategy": "Test error messages across different scenarios, verify messages are clear and actionable, and validate that technical details are properly abstracted"
+          },
+          {
+            "id": 5,
+            "title": "Optimize Validation Feedback and User Experience",
+            "description": "Enhance form validation feedback with real-time validation and improved user experience patterns",
+            "dependencies": [
+              1,
+              3,
+              4
+            ],
+            "details": "Implement real-time validation feedback with debounced input validation. Add field-level error display with proper styling and positioning. Create validation state indicators (loading, success, error) for form fields. Optimize validation timing to balance user experience with performance.",
+            "status": "pending",
+            "testStrategy": "Test real-time validation behavior, verify validation feedback timing and accuracy, and conduct user experience testing for form interactions"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "title": "Mobile Responsiveness and Accessibility",
+        "description": "Ensure full mobile responsiveness and accessibility compliance",
+        "details": "Optimize all components for mobile devices using Tailwind CSS responsive utilities. Add proper ARIA labels, keyboard navigation support, and focus management. Ensure color contrast meets WCAG guidelines. Test with screen readers and keyboard-only navigation.",
+        "testStrategy": "Test on various mobile devices and screen sizes, verify keyboard navigation works throughout app, and test with accessibility tools",
+        "priority": "medium",
+        "dependencies": [
+          21
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Mobile Responsive Design Optimization",
+            "description": "Optimize all components for mobile devices using Tailwind CSS responsive utilities",
+            "dependencies": [],
+            "details": "Implement responsive breakpoints (sm, md, lg, xl) across all components. Optimize layout for mobile-first design, ensure proper spacing and sizing on different screen sizes. Test navigation, forms, and interactive elements on mobile devices. Use Tailwind's responsive utilities for typography, spacing, and layout adjustments.",
+            "status": "pending",
+            "testStrategy": "Test on multiple mobile devices and screen sizes, verify layout adapts correctly at all breakpoints"
+          },
+          {
+            "id": 2,
+            "title": "ARIA Label and Semantic HTML Implementation",
+            "description": "Add proper ARIA labels and implement semantic HTML structure throughout the application",
+            "dependencies": [],
+            "details": "Add ARIA labels to all interactive elements, form controls, and navigation components. Implement proper semantic HTML tags (header, nav, main, section, article, aside, footer). Add role attributes where necessary. Ensure proper heading hierarchy (h1-h6) and landmark roles for screen reader navigation.",
+            "status": "pending",
+            "testStrategy": "Validate HTML semantics with accessibility validators and test with screen readers"
+          },
+          {
+            "id": 3,
+            "title": "Keyboard Navigation and Focus Management",
+            "description": "Implement comprehensive keyboard navigation support and proper focus management",
+            "dependencies": [
+              2
+            ],
+            "details": "Ensure all interactive elements are keyboard accessible with proper tab order. Implement focus trapping for modals and dropdowns. Add visible focus indicators that meet contrast requirements. Handle focus management for dynamic content updates and route changes. Implement skip links for main content navigation.",
+            "status": "pending",
+            "testStrategy": "Test complete keyboard-only navigation throughout the application, verify focus indicators are visible"
+          },
+          {
+            "id": 4,
+            "title": "Color Contrast and Visual Accessibility",
+            "description": "Ensure color contrast meets WCAG guidelines and implement visual accessibility features",
+            "dependencies": [],
+            "details": "Audit all color combinations to meet WCAG AA contrast ratios (4.5:1 for normal text, 3:1 for large text). Implement alternative visual indicators beyond color alone. Ensure sufficient contrast for focus states, hover states, and interactive elements. Add support for reduced motion preferences and high contrast modes.",
+            "status": "pending",
+            "testStrategy": "Use color contrast analyzers to verify WCAG compliance, test with high contrast mode enabled"
+          },
+          {
+            "id": 5,
+            "title": "Screen Reader Compatibility Testing",
+            "description": "Test and optimize application compatibility with screen readers and assistive technologies",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Test with popular screen readers (NVDA, JAWS, VoiceOver). Ensure proper announcement of dynamic content changes using ARIA live regions. Verify form validation messages are announced correctly. Test navigation landmarks and heading structure. Optimize reading order and content flow for screen readers.",
+            "status": "pending",
+            "testStrategy": "Comprehensive testing with multiple screen readers, verify all content is accessible and properly announced"
+          },
+          {
+            "id": 6,
+            "title": "Accessibility Audit and Compliance Verification",
+            "description": "Conduct comprehensive accessibility audit and verify WCAG compliance across the application",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "details": "Run automated accessibility testing tools (axe-core, Lighthouse accessibility audit). Conduct manual testing with keyboard navigation and screen readers. Create accessibility compliance report documenting WCAG 2.1 AA conformance. Fix any remaining accessibility issues and document accessibility features for users.",
+            "status": "pending",
+            "testStrategy": "Use automated testing tools, manual testing checklist, and third-party accessibility audit if needed"
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "title": "Performance Optimization",
+        "description": "Optimize application performance with loading states and code splitting",
+        "details": "Implement loading skeletons for async operations using Shadcn UI skeleton component. Add code splitting for route-based chunks. Optimize database queries with proper indexing. Implement caching for frequently accessed data. Add lazy loading for non-critical components.",
+        "testStrategy": "Test loading states, measure performance metrics, verify code splitting works correctly, and test caching behavior",
+        "priority": "low",
+        "dependencies": [
+          22
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Loading Skeleton and State Implementation",
+            "description": "Implement loading skeletons for async operations using Shadcn UI skeleton component with proper loading states",
+            "dependencies": [],
+            "details": "Create reusable skeleton components for different UI elements (cards, lists, forms). Implement loading states for async operations like data fetching, form submissions, and navigation. Use Shadcn UI skeleton component as base and customize for different content types. Add proper loading indicators and transitions.",
+            "status": "pending",
+            "testStrategy": "Test skeleton display during loading states, verify smooth transitions, and ensure skeletons match actual content layout"
+          },
+          {
+            "id": 2,
+            "title": "Code Splitting and Lazy Loading Setup",
+            "description": "Implement route-based code splitting and lazy loading for non-critical components to reduce bundle size",
+            "dependencies": [],
+            "details": "Set up React.lazy() for route components and implement Suspense boundaries. Create lazy-loaded components for non-critical features like modals, charts, and secondary pages. Configure webpack/Vite for optimal chunk splitting. Implement preloading strategies for likely-to-be-used components.",
+            "status": "pending",
+            "testStrategy": "Verify code splitting creates separate chunks, test lazy loading behavior, and measure bundle size reduction"
+          },
+          {
+            "id": 3,
+            "title": "Database Query Optimization and Indexing",
+            "description": "Optimize database queries with proper indexing and query structure for improved performance",
+            "dependencies": [],
+            "details": "Analyze slow queries using database profiling tools. Add appropriate indexes on frequently queried columns (user_id, booking dates, status fields). Optimize N+1 queries with proper joins or batching. Implement query result pagination for large datasets. Review and optimize existing Supabase queries.",
+            "status": "pending",
+            "testStrategy": "Measure query execution times before and after optimization, test with large datasets, and verify index usage"
+          },
+          {
+            "id": 4,
+            "title": "Caching Strategy Implementation",
+            "description": "Implement caching mechanisms for frequently accessed data to reduce server load and improve response times",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement client-side caching using React Query or SWR for API responses. Set up appropriate cache invalidation strategies for user data, booking information, and tutor profiles. Configure cache TTL based on data volatility. Implement optimistic updates for better user experience.",
+            "status": "pending",
+            "testStrategy": "Test cache hit/miss scenarios, verify cache invalidation works correctly, and measure performance improvements"
+          },
+          {
+            "id": 5,
+            "title": "Performance Monitoring and Measurement",
+            "description": "Set up performance monitoring tools and establish metrics to track optimization effectiveness",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Implement performance monitoring using Web Vitals API to track Core Web Vitals (LCP, FID, CLS). Set up bundle analyzer to monitor chunk sizes. Create performance dashboard to track loading times, API response times, and user interaction metrics. Establish performance budgets and alerts.",
+            "status": "pending",
+            "testStrategy": "Verify performance metrics are collected accurately, test monitoring dashboard functionality, and validate performance improvements"
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "title": "End-to-End Testing and Deployment",
+        "description": "Comprehensive testing of all user flows and production deployment",
+        "details": "Test complete user flows: student registration and booking, tutor availability management and booking approval, email notifications, time zone conversions. Deploy Edge Functions to Supabase. Set up Vercel project with environment variables. Deploy application and test in production environment.",
+        "testStrategy": "Execute full end-to-end test scenarios, verify production deployment works correctly, test email delivery in production, and confirm all features work as expected",
+        "priority": "high",
+        "dependencies": [
+          23,
+          24
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Comprehensive User Flow Testing Scenarios",
+            "description": "Execute complete end-to-end testing of all user workflows including student registration, booking flows, tutor management, and cross-role interactions",
+            "dependencies": [],
+            "details": "Test student registration and booking flow, tutor availability management and booking approval process, email notification delivery at each step, time zone conversion accuracy across different zones, cross-browser compatibility, and mobile responsiveness. Create test data sets and document all test scenarios with expected outcomes.",
+            "status": "pending",
+            "testStrategy": "Manual testing with documented test cases, automated browser testing using Playwright, and validation of email delivery in staging environment"
+          },
+          {
+            "id": 2,
+            "title": "Edge Functions Deployment and Configuration",
+            "description": "Deploy and configure Supabase Edge Functions for email notifications and booking management",
+            "dependencies": [
+              1
+            ],
+            "details": "Deploy Edge Functions to Supabase production environment, configure environment variables for email service integration, set up function triggers for booking events, test function execution and error handling, configure rate limiting and security policies, and verify function logs and monitoring.",
+            "status": "pending",
+            "testStrategy": "Test Edge Function execution with real booking scenarios, verify email delivery, and monitor function performance and error rates"
+          },
+          {
+            "id": 3,
+            "title": "Production Environment Setup and Configuration",
+            "description": "Set up Vercel production deployment with proper environment variables and database connections",
+            "dependencies": [
+              2
+            ],
+            "details": "Create Vercel project and configure build settings, set up production environment variables for Supabase connection, authentication secrets, and email service credentials, configure custom domain and SSL certificates, set up database connection pooling, and configure CDN and caching policies.",
+            "status": "pending",
+            "testStrategy": "Verify environment variable access, test database connectivity, validate SSL certificate installation, and confirm CDN performance"
+          },
+          {
+            "id": 4,
+            "title": "End-to-End Test Automation",
+            "description": "Implement automated testing suite for critical user flows and regression testing",
+            "dependencies": [
+              3
+            ],
+            "details": "Set up Playwright or Cypress testing framework, create automated tests for student registration and booking flow, tutor availability management, email notification triggers, time zone conversion accuracy, and authentication flows. Configure test data management and cleanup procedures.",
+            "status": "pending",
+            "testStrategy": "Automated test execution in CI/CD pipeline, parallel test execution across browsers, and integration with deployment workflow"
+          },
+          {
+            "id": 5,
+            "title": "Production Monitoring and Health Checks",
+            "description": "Implement comprehensive monitoring, logging, and health check systems for production environment",
+            "dependencies": [
+              4
+            ],
+            "details": "Set up application performance monitoring with error tracking, configure database query monitoring and slow query alerts, implement health check endpoints for uptime monitoring, set up log aggregation and analysis, configure alerting for critical errors and performance degradation.",
+            "status": "pending",
+            "testStrategy": "Test monitoring alerts with simulated failures, verify log collection and analysis, and validate health check endpoint responses"
+          },
+          {
+            "id": 6,
+            "title": "Post-Deployment Validation and Rollback Procedures",
+            "description": "Execute final production validation tests and establish rollback procedures for deployment safety",
+            "dependencies": [
+              5
+            ],
+            "details": "Perform smoke tests on production deployment, validate all critical user flows work correctly, test email delivery in production environment, verify time zone conversions with real user data, document rollback procedures and test rollback process, create deployment checklist and sign-off procedures.",
+            "status": "pending",
+            "testStrategy": "Production smoke testing with real user scenarios, rollback procedure testing in staging environment, and validation of all monitoring and alerting systems"
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-11-13T03:25:04.088Z",
+      "updated": "2025-11-13T03:25:04.088Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
