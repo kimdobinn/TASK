@@ -1,8 +1,8 @@
 'use client'
 
 import { RequireAuth } from '@/components/auth/require-auth'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { useAuth } from '@/hooks/use-auth'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -12,34 +12,16 @@ import {
 } from '@/components/ui/card'
 
 function TutorDashboardContent() {
-  const { profile, signOut } = useAuth()
-
-  const handleSignOut = async () => {
-    try {
-      console.log('Sign out clicked')
-      await signOut()
-    } catch (error) {
-      console.error('Sign out failed:', error)
-    }
-  }
+  const { profile } = useAuth()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-      <div className="container mx-auto p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Tutor Dashboard</h1>
-            <p className="text-muted-foreground mt-1">
-              Welcome back, {profile?.full_name}!
-            </p>
-          </div>
-          <Button
-            onClick={handleSignOut}
-            variant="outline"
-            type="button"
-          >
-            Sign out
-          </Button>
+    <DashboardLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">Tutor Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
+            Welcome back, {profile?.full_name}!
+          </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -100,7 +82,7 @@ function TutorDashboardContent() {
           </Card>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
 
