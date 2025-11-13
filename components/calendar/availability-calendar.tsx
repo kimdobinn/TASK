@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, forwardRef, useImperativeHandle } from 'react'
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar'
 import { format, parse, startOfWeek, getDay } from 'date-fns'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -38,34 +38,47 @@ interface AvailabilityCalendarProps {
   editable?: boolean
 }
 
-export function AvailabilityCalendar({
-  tutorId,
-  onSelectSlot,
-  onSelectEvent,
-  editable = true,
-}: AvailabilityCalendarProps) {
-  const [blockedTimes, setBlockedTimes] = useState<BlockedTime[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [currentView, setCurrentView] = useState<View>('week')
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const { userTimeZone, convertFromUTC } = useTimezone()
+export interface AvailabilityCalendarHandle {
+  refresh: () => void
+}
 
-  // Fetch blocked times
-  const fetchBlockedTimes = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      const times = await getBlockedTimes(tutorId)
-      setBlockedTimes(times)
-    } catch (error) {
-      console.error('Error fetching blocked times:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [tutorId])
+export const AvailabilityCalendar = forwardRef<AvailabilityCalendarHandle, AvailabilityCalendarProps>(
+  function AvailabilityCalendar(
+    {
+      tutorId,
+      onSelectSlot,
+      onSelectEvent,
+      editable = true,
+    }: AvailabilityCalendarProps,
+    ref
+  ) {
+    const [blockedTimes, setBlockedTimes] = useState<BlockedTime[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [currentView, setCurrentView] = useState<View>('week')
+    const [currentDate, setCurrentDate] = useState(new Date())
+    const { userTimeZone, convertFromUTC } = useTimezone()
 
-  useEffect(() => {
-    fetchBlockedTimes()
-  }, [fetchBlockedTimes])
+    // Fetch blocked times
+    const fetchBlockedTimes = useCallback(async () => {
+      try {
+        setIsLoading(true)
+        const times = await getBlockedTimes(tutorId)
+        setBlockedTimes(times)
+      } catch (error) {
+        console.error('Error fetching blocked times:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }, [tutorId])
+
+    useEffect(() => {
+      fetchBlockedTimes()
+    }, [fetchBlockedTimes])
+
+    // Expose refresh method to parent
+    useImperativeHandle(ref, () => ({
+      refresh: fetchBlockedTimes,
+    }), [fetchBlockedTimes])
 
   // Convert blocked times to calendar events
   const events: CalendarEvent[] = useMemo(() => {
@@ -244,4 +257,4 @@ export function AvailabilityCalendar({
       </p>
     </div>
   )
-}
+})
