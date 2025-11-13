@@ -523,7 +523,7 @@
             "description": "Implement complete CRUD operations for blocked times using Supabase client",
             "dependencies": [],
             "details": "Create blocked_times table operations including createBlockedTime, getBlockedTimes, updateBlockedTime, and deleteBlockedTime functions. Implement proper error handling and TypeScript types. Set up RLS policies to ensure tutors can only manage their own blocked times. Store all times in UTC format.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test all CRUD operations with various time ranges, verify RLS policies work correctly, and test error handling for invalid data"
           },
           {
@@ -1739,7 +1739,7 @@
     ],
     "metadata": {
       "created": "2025-11-13T03:25:04.088Z",
-      "updated": "2025-11-13T05:33:49.636Z",
+      "updated": "2025-11-13T05:37:28.383Z",
       "description": "Tasks for master context"
     }
   }

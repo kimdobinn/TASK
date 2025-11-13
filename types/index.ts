@@ -19,8 +19,30 @@ export interface BlockedTime {
   start_time: string;
   end_time: string;
   is_recurring: boolean;
-  recurrence_pattern?: Record<string, unknown>;
+  recurrence_pattern?: RecurrencePattern;
   created_at: string;
+  updated_at?: string;
+}
+
+export interface RecurrencePattern {
+  frequency: 'daily' | 'weekly' | 'monthly';
+  interval?: number; // e.g., every 2 weeks
+  days_of_week?: number[]; // 0-6, Sunday to Saturday
+  end_date?: string; // When the recurrence should stop
+}
+
+export interface CreateBlockedTimeInput {
+  start_time: string; // ISO string in UTC
+  end_time: string; // ISO string in UTC
+  is_recurring: boolean;
+  recurrence_pattern?: RecurrencePattern;
+}
+
+export interface UpdateBlockedTimeInput {
+  start_time?: string;
+  end_time?: string;
+  is_recurring?: boolean;
+  recurrence_pattern?: RecurrencePattern;
 }
 
 export interface BookingRequest {
