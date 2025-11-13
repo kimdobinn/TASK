@@ -26,6 +26,8 @@ import {
 import { getUserFriendlyErrorMessage } from '@/lib/supabase-errors'
 import Link from 'next/link'
 import type { UserRole } from '@/types'
+import { TimeZoneSelector } from '@/components/timezone/timezone-selector'
+import { detectUserTimeZone } from '@/utils/timezone'
 
 const signUpSchema = z
   .object({
@@ -65,11 +67,12 @@ export default function SignUpPage() {
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timeZone: detectUserTimeZone(),
     },
   })
 
   const selectedRole = watch('role')
+  const selectedTimeZone = watch('timeZone')
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
@@ -186,6 +189,21 @@ export default function SignUpPage() {
               {errors.role && (
                 <p className="text-sm text-destructive">{errors.role.message}</p>
               )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="timeZone">Time Zone</Label>
+              <TimeZoneSelector
+                value={selectedTimeZone}
+                onChange={(value) => setValue('timeZone', value)}
+                disabled={isLoading}
+              />
+              {errors.timeZone && (
+                <p className="text-sm text-destructive">{errors.timeZone.message}</p>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Your timezone was automatically detected. You can change it if needed.
+              </p>
             </div>
 
             <div className="space-y-2">

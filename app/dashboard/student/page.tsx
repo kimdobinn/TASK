@@ -3,6 +3,7 @@
 import { RequireAuth } from '@/components/auth/require-auth'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { useAuth } from '@/hooks/use-auth'
+import { useTimezone } from '@/hooks/use-timezone'
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import {
 
 function StudentDashboardContent() {
   const { profile } = useAuth()
+  const { userTimeZoneDisplay } = useTimezone()
 
   return (
     <DashboardLayout>
@@ -65,7 +67,7 @@ function StudentDashboardContent() {
                   <span className="font-medium">Role:</span> {profile?.role}
                 </p>
                 <p>
-                  <span className="font-medium">Timezone:</span> {profile?.time_zone}
+                  <span className="font-medium">Timezone:</span> {userTimeZoneDisplay}
                 </p>
               </div>
             </CardContent>
