@@ -1,2 +1,4 @@
 // Custom React hooks for Class Scheduler
-// Export hooks here as they are created
+
+export { useAuth } from './use-auth'
+export { useRole } from './use-role'
