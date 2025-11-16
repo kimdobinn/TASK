@@ -79,6 +79,7 @@ export async function notifyTutorOfBookingRequest(
 
 /**
  * Create notification for booking approval (sent to student)
+ * Task 18: Status Update Notification Function - Send email on approval
  */
 export async function notifyStudentOfApproval(
   studentId: string,
@@ -98,6 +99,7 @@ export async function notifyStudentOfApproval(
       minute: '2-digit',
     })
 
+    // Create in-app notification
     await createNotification({
       user_id: studentId,
       title: 'Booking Approved',
@@ -105,6 +107,36 @@ export async function notifyStudentOfApproval(
       type: 'booking_approved',
       related_booking_id: bookingId,
     })
+
+    // Send email notification via Edge Function
+    const supabase = createClient()
+
+    // Get student email
+    const { data: studentProfile } = await supabase
+      .from('user_profiles')
+      .select('email')
+      .eq('id', studentId)
+      .single()
+
+    if (studentProfile?.email) {
+      // Call send-booking-notification Edge Function
+      supabase.functions
+        .invoke('send-booking-notification', {
+          body: {
+            type: 'approved',
+            bookingId,
+            recipientEmail: studentProfile.email,
+          },
+        })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Failed to send approval email:', error)
+          } else {
+            console.log('✅ Approval email sent successfully:', data)
+          }
+        })
+        .catch(err => console.error('Error invoking email function:', err))
+    }
   } catch (error) {
     console.error('Error notifying student:', error)
     // Non-critical, don't throw
@@ -113,6 +145,7 @@ export async function notifyStudentOfApproval(
 
 /**
  * Create notification for booking rejection (sent to student)
+ * Task 18: Status Update Notification Function - Send email on rejection
  */
 export async function notifyStudentOfRejection(
   studentId: string,
@@ -137,6 +170,7 @@ export async function notifyStudentOfRejection(
       ? `Your ${subject} tutoring session with ${tutorName} on ${formattedTime} was not approved. Reason: ${rejectionNote}`
       : `Your ${subject} tutoring session with ${tutorName} on ${formattedTime} was not approved.`
 
+    // Create in-app notification
     await createNotification({
       user_id: studentId,
       title: 'Booking Not Approved',
@@ -144,6 +178,36 @@ export async function notifyStudentOfRejection(
       type: 'booking_rejected',
       related_booking_id: bookingId,
     })
+
+    // Send email notification via Edge Function
+    const supabase = createClient()
+
+    // Get student email
+    const { data: studentProfile } = await supabase
+      .from('user_profiles')
+      .select('email')
+      .eq('id', studentId)
+      .single()
+
+    if (studentProfile?.email) {
+      // Call send-booking-notification Edge Function
+      supabase.functions
+        .invoke('send-booking-notification', {
+          body: {
+            type: 'rejected',
+            bookingId,
+            recipientEmail: studentProfile.email,
+          },
+        })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Failed to send rejection email:', error)
+          } else {
+            console.log('✅ Rejection email sent successfully:', data)
+          }
+        })
+        .catch(err => console.error('Error invoking email function:', err))
+    }
   } catch (error) {
     console.error('Error notifying student:', error)
     // Non-critical, don't throw

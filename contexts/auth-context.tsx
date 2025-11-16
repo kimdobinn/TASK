@@ -13,6 +13,7 @@ interface UserProfile {
   role: UserRole
   full_name: string
   time_zone: string
+  created_at?: string
 }
 
 interface AuthContextType {
@@ -41,14 +42,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Fetch user profile
   const fetchProfile = async (userId: string): Promise<UserProfile | null> => {
     try {
-      const { data, error } = await withRetry(
-        () =>
-          supabase
-            .from('user_profiles')
-            .select('id, role, full_name, time_zone')
-            .eq('id', userId)
-            .single()
-      )
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('id, role, full_name, time_zone, created_at')
+        .eq('id', userId)
+        .single()
 
       if (error) throw error
       return data
@@ -60,21 +58,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize auth state
   useEffect(() => {
+    let mounted = true
+
     const initAuth = async () => {
+      console.log('[AuthContext] initAuth: Starting initialization')
       try {
+        // Add timeout to getSession to prevent hanging
+        const sessionPromise = supabase.auth.getSession()
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('getSession timeout')), 5000)
+        )
+
+        console.log('[AuthContext] initAuth: Fetching session with timeout...')
         const {
           data: { session },
-        } = await supabase.auth.getSession()
+        } = await Promise.race([sessionPromise, timeoutPromise]) as any
+        console.log('[AuthContext] initAuth: Session fetched:', !!session)
 
-        if (session?.user) {
+        if (mounted && session?.user) {
+          console.log('[AuthContext] initAuth: User found, setting user state')
           setUser(session.user)
+          console.log('[AuthContext] initAuth: Fetching profile for user:', session.user.id)
           const userProfile = await fetchProfile(session.user.id)
+          console.log('[AuthContext] initAuth: Profile fetched:', userProfile)
           setProfile(userProfile)
+        } else if (!session) {
+          console.log('[AuthContext] initAuth: No session found')
         }
       } catch (error) {
-        console.error('Error initializing auth:', parseSupabaseError(error))
+        console.error('[AuthContext] Error initializing auth:', parseSupabaseError(error))
+        // If getSession fails/times out, auth state listener will handle initialization
       } finally {
-        setIsLoading(false)
+        if (mounted) {
+          console.log('[AuthContext] initAuth: Setting isLoading to false')
+          setIsLoading(false)
+        }
       }
     }
 
@@ -100,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
   }, [])

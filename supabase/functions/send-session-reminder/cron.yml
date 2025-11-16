@@ -1,0 +1,11 @@
+# Cron Schedule for Session Reminder Function
+# Task 19: Session Reminder Function - Scheduled execution
+
+# Run daily at 10:00 AM UTC
+# This sends reminders for sessions happening 24 hours from now
+schedule: "0 10 * * *"
+
+# Alternative schedules (uncomment to use):
+# Every 6 hours: "0 */6 * * *"
+# Twice daily (6 AM and 6 PM UTC): "0 6,18 * * *"
+# Every hour (for testing): "0 * * * *"

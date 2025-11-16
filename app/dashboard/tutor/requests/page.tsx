@@ -4,7 +4,10 @@ import { useState, useEffect } from 'react'
 import { RequireAuth } from '@/components/auth/require-auth'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { BookingRequestsList } from '@/components/booking/booking-requests-list'
+import { ConnectionIndicator } from '@/components/realtime/connection-indicator'
 import { getBookingRequests } from '@/lib/booking-requests'
+import { useRealtimeBookings } from '@/hooks/use-realtime-bookings'
+import { useAuth } from '@/contexts/auth-context'
 import type { BookingRequest, BookingStatus } from '@/types'
 import {
   Card,
@@ -16,12 +19,38 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, AlertCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function TutorRequestsPage() {
+  const { user } = useAuth()
   const [allRequests, setAllRequests] = useState<BookingRequest[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<BookingStatus | 'all'>('pending')
+
+  // Task 21, Subtask 2: Real-time subscription for tutor dashboard
+  const { connectionState, isConnected } = useRealtimeBookings({
+    userRole: 'tutor',
+    userId: user?.id || '',
+    onInsert: (newBooking) => {
+      // Show toast notification for new booking request
+      toast.success('New booking request received!', {
+        description: `${newBooking.subject} - Check your requests tab`,
+        action: {
+          label: 'View',
+          onClick: () => setActiveTab('pending')
+        }
+      })
+
+      // Refresh requests list
+      fetchRequests()
+    },
+    onUpdate: (updatedBooking) => {
+      // Silently refresh when bookings are updated
+      fetchRequests()
+    },
+    debug: process.env.NODE_ENV === 'development'
+  })
 
   useEffect(() => {
     fetchRequests()
@@ -58,11 +87,17 @@ export default function TutorRequestsPage() {
     <RequireAuth requiredRole="tutor">
       <DashboardLayout>
         <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold">Booking Requests</h1>
-            <p className="text-muted-foreground mt-1">
-              Review and manage student booking requests
-            </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div>
+                <h1 className="text-3xl font-bold">Booking Requests</h1>
+                <p className="text-muted-foreground mt-1">
+                  Review and manage student booking requests
+                </p>
+              </div>
+              {/* Real-time connection indicator */}
+              <ConnectionIndicator state={connectionState} showLabel />
+            </div>
           </div>
 
           {isLoading && (

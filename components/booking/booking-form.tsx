@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { createBookingRequest } from '@/lib/booking-requests'
 import { getOnlyAvailableSlots, groupSlotsByDay, type TimeSlot } from '@/lib/availability'
 import type { TutorProfile } from '@/lib/tutors'
-import { toUTC, fromUTC, userTimeZone, DATE_FORMATS } from '@/lib/timezone'
+import { toUTC, fromUTC, DATE_FORMATS } from '@/lib/timezone'
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -44,12 +44,8 @@ import { useRouter } from 'next/navigation'
 const bookingFormSchema = z.object({
   tutorId: z.string().min(1, 'Please select a tutor'),
   subject: z.string().min(1, 'Please select a subject'),
-  duration: z.enum(['30', '60', '120'], {
-    required_error: 'Please select a duration',
-  }),
-  date: z.date({
-    required_error: 'Please select a date',
-  }),
+  duration: z.enum(['30', '60', '120']),
+  date: z.date(),
   timeSlot: z.string().min(1, 'Please select a time slot'),
   specificRequests: z.string().optional(),
 })

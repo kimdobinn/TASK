@@ -7,7 +7,10 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { UpcomingSessions } from '@/components/booking/upcoming-sessions'
 import { PendingRequests } from '@/components/booking/pending-requests'
 import { BookingHistory } from '@/components/booking/booking-history'
+import { ConnectionIndicator } from '@/components/realtime/connection-indicator'
 import { getBookingRequests } from '@/lib/booking-requests'
+import { useRealtimeBookings } from '@/hooks/use-realtime-bookings'
+import { useAuth } from '@/contexts/auth-context'
 import type { BookingRequest } from '@/types'
 import {
   Card,
@@ -19,12 +22,36 @@ import {
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, AlertCircle, Calendar, Plus } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function StudentDashboardPage() {
   const router = useRouter()
+  const { user } = useAuth()
   const [bookingRequests, setBookingRequests] = useState<BookingRequest[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Task 21, Subtask 2: Real-time subscription for student dashboard
+  const { connectionState, isConnected } = useRealtimeBookings({
+    userRole: 'student',
+    userId: user?.id || '',
+    onUpdate: (updatedBooking) => {
+      // Show toast notification when booking status changes
+      if (updatedBooking.status === 'approved') {
+        toast.success('Your booking has been approved!', {
+          description: `Session on ${new Date(updatedBooking.requested_start_time).toLocaleDateString()}`
+        })
+      } else if (updatedBooking.status === 'rejected') {
+        toast.error('Your booking was declined', {
+          description: updatedBooking.rejection_note || 'Please try booking a different time'
+        })
+      }
+
+      // Refresh booking list
+      fetchBookingRequests()
+    },
+    debug: process.env.NODE_ENV === 'development'
+  })
 
   useEffect(() => {
     fetchBookingRequests()
@@ -67,11 +94,15 @@ export default function StudentDashboardPage() {
         <div className="space-y-6">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold">My Tutoring Sessions</h1>
-              <p className="text-muted-foreground mt-1">
-                Manage your tutoring sessions and booking requests
-              </p>
+            <div className="flex items-center gap-3">
+              <div>
+                <h1 className="text-3xl font-bold">My Tutoring Sessions</h1>
+                <p className="text-muted-foreground mt-1">
+                  Manage your tutoring sessions and booking requests
+                </p>
+              </div>
+              {/* Real-time connection indicator */}
+              <ConnectionIndicator state={connectionState} showLabel />
             </div>
             <Button onClick={() => router.push('/dashboard/student/book-session')}>
               <Plus className="mr-2 h-4 w-4" />

@@ -40,8 +40,8 @@ const signUpSchema = z
       .regex(/[0-9]/, 'Password must contain at least one number'),
     confirmPassword: z.string(),
     fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-    role: z.enum(['student', 'tutor'], {
-      required_error: 'Please select a role',
+    role: z.enum(['student', 'tutor']).refine(val => val !== undefined, {
+      message: 'Please select a role',
     }),
     timeZone: z.string().min(1, 'Time zone is required'),
   })

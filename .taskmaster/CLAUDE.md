@@ -87,7 +87,7 @@ Task Master provides an MCP server that Claude Code can connect to. Configure in
       "command": "npx",
       "args": ["-y", "task-master-ai"],
       "env": {
-        "ANTHROPIC_API_KEY": "your_key_here",
+        "ANTHROPIC_API_KEY2": "your_key_here",
         "PERPLEXITY_API_KEY": "your_key_here",
         "OPENAI_API_KEY": "OPENAI_API_KEY_HERE",
         "GOOGLE_API_KEY": "GOOGLE_API_KEY_HERE",
@@ -229,7 +229,7 @@ Add to `.claude/settings.json`:
 
 At least **one** of these API keys must be configured:
 
-- `ANTHROPIC_API_KEY` (Claude models) - **Recommended**
+- `ANTHROPIC_API_KEY2` (Claude models) - **Recommended**
 - `PERPLEXITY_API_KEY` (Research features) - **Highly recommended**
 - `OPENAI_API_KEY` (GPT models)
 - `GOOGLE_API_KEY` (Gemini models)

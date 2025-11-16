@@ -13,6 +13,14 @@ export interface User {
   created_at: string;
 }
 
+export interface UserProfile {
+  id: string;
+  role: UserRole;
+  full_name: string;
+  time_zone: string;
+  created_at: string;
+}
+
 export interface BlockedTime {
   id: string;
   tutor_id: string;

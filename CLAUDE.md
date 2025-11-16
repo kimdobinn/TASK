@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Next.js 16 project using React 19, TypeScript, and Tailwind CSS v4. The project integrates shadcn/ui components with the "new-york" style variant and uses Lucide React for icons.
 
+# Project Rules
+
+- Always use Context7 MCP when working with libraries, APIs, or frameworks 
+  to get the latest documentation
+- Use Taskmaster to structure the development workflow
+- Follow Shadcn UI best practices
+
 ## Development Commands
 
 ```bash
@@ -67,7 +74,3 @@ npm run lint
 - Core: next@16.0.1, react@19.2.0, react-dom@19.2.0
 - UI: class-variance-authority, clsx, lucide-react, tailwind-merge
 - Dev: TypeScript 5, ESLint 9, Tailwind CSS 4
-
-## Task Master AI Instructions
-**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
-@./.taskmaster/CLAUDE.md

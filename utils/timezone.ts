@@ -123,6 +123,10 @@ export const DATE_FORMATS = {
   ISO: "yyyy-MM-dd'T'HH:mm:ssXXX", // 2024-04-29T12:00:00-04:00
   ISO_DATE: 'yyyy-MM-dd',          // 2024-04-29
   ISO_TIME: 'HH:mm:ss',            // 12:00:00
+
+  // Aliases for common uses
+  DISPLAY_DATE: 'PPP',  // April 29th, 2024
+  DISPLAY_DATE_TIME: 'PPPp', // April 29th, 2024 at 12:00 PM
 } as const
 
 /**

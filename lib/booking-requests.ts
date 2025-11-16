@@ -272,6 +272,7 @@ export async function getBookingRequestById(id: string): Promise<BookingRequest 
 /**
  * Update booking request status (tutor only)
  * Sends notifications to students when status changes
+ * Task 14: Booking Status Management
  */
 export async function updateBookingRequestStatus(
   id: string,
@@ -280,6 +281,76 @@ export async function updateBookingRequestStatus(
 ): Promise<BookingRequest> {
   try {
     const supabase = createClient()
+
+    // Validate user is authenticated (Subtask 14.4: Security validation)
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser()
+
+    if (userError || !user) {
+      throw new Error('You must be logged in to update booking status')
+    }
+
+    // Verify user is a tutor (Subtask 14.4: Role-based access control)
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError || !profile) {
+      throw new Error('User profile not found')
+    }
+
+    if (profile.role !== 'tutor') {
+      throw new Error('Only tutors can update booking request status')
+    }
+
+    // Get existing booking to validate ownership and status
+    const { data: existingBooking, error: fetchError } = await supabase
+      .from('booking_requests')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (fetchError || !existingBooking) {
+      throw new Error('Booking request not found')
+    }
+
+    // Verify tutor owns this booking request (Subtask 14.4: Ownership validation)
+    if (existingBooking.tutor_id !== user.id) {
+      throw new Error('You can only update your own booking requests')
+    }
+
+    // Validate current status allows updates (Subtask 14.4: Status transition validation)
+    if (existingBooking.status !== 'pending') {
+      throw new Error(`Cannot update booking - status is already ${existingBooking.status}`)
+    }
+
+    // Validate new status (Subtask 14.2, 14.3: Status validation)
+    if (!['approved', 'rejected', 'pending'].includes(status)) {
+      throw new Error('Invalid status - must be "approved", "rejected", or "pending"')
+    }
+
+    // For approval, check for scheduling conflicts (Subtask 14.2: Approve action validation)
+    if (status === 'approved') {
+      const conflicts = await checkBookingConflicts(
+        existingBooking.tutor_id,
+        existingBooking.requested_start_time,
+        existingBooking.requested_end_time,
+        id
+      )
+
+      if (conflicts.length > 0) {
+        throw new Error('Cannot approve - this time slot conflicts with another approved booking')
+      }
+    }
+
+    // Validate rejection note length (Subtask 14.3: Reject action validation)
+    if (status === 'rejected' && rejectionNote && rejectionNote.length > 500) {
+      throw new Error('Rejection note is too long - maximum 500 characters')
+    }
 
     const updateData: any = {
       status,

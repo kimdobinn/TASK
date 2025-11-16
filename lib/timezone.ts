@@ -13,12 +13,11 @@ export function fromUTC(utcDate: string | Date): Date {
 }
 
 /**
- * Convert a local date to UTC
+ * Convert a local date to UTC ISO string
  * Simplified wrapper for components
  */
-export function toUTC(localDate: Date, timeZone?: string): Date {
+export function toUTC(localDate: Date, timeZone?: string): string {
   const tz = timeZone || detectUserTimeZone()
-  // For now, just return the date as-is since Date objects are inherently UTC
-  // The conversion happens when we format/display them
-  return localDate
+  // Convert to ISO string for database storage
+  return localDate.toISOString()
 }
