@@ -36,7 +36,7 @@ interface BookingRequest {
 
 function StudentBookingsContent() {
   const { user } = useAuth()
-  const { convertToUserTimeZone } = useTimezone()
+  const { fromUTC } = useTimezone()
   const [bookings, setBookings] = useState<BookingRequest[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -77,8 +77,8 @@ function StudentBookingsContent() {
   const rejectedBookings = bookings.filter((b) => b.status === 'rejected')
 
   const renderBookingCard = (booking: BookingRequest) => {
-    const startTime = convertToUserTimeZone(booking.requested_start_time)
-    const endTime = convertToUserTimeZone(booking.requested_end_time)
+    const startTime = fromUTC(booking.requested_start_time)
+    const endTime = fromUTC(booking.requested_end_time)
 
     let statusIcon
     let statusColor
