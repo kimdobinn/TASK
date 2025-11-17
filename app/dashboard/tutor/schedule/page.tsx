@@ -33,7 +33,7 @@ interface BookingRequest {
 
 function TutorScheduleContent() {
   const { user } = useAuth()
-  const { convertToUserTimeZone } = useTimezone()
+  const { fromUTC } = useTimezone()
   const [approvedBookings, setApprovedBookings] = useState<BookingRequest[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -107,8 +107,8 @@ function TutorScheduleContent() {
         ) : (
           <div className="grid gap-4">
             {approvedBookings.map((booking) => {
-              const startTime = convertToUserTimeZone(booking.requested_start_time)
-              const endTime = convertToUserTimeZone(booking.requested_end_time)
+              const startTime = fromUTC(booking.requested_start_time)
+              const endTime = fromUTC(booking.requested_end_time)
 
               return (
                 <Card key={booking.id}>
