@@ -27,7 +27,7 @@ export const signupSchema = z.object({
     .max(100, 'Name must be less than 100 characters')
     .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
   role: z.enum(['student', 'tutor'], {
-    errorMap: () => ({ message: 'Please select a role' })
+    message: 'Please select a role'
   }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Passwords do not match',
@@ -72,14 +72,13 @@ export const bookingFormSchema = z.object({
     'history',
     'other'
   ], {
-    errorMap: () => ({ message: 'Please select a subject' })
+    message: 'Please select a subject'
   }),
   duration: z.enum(['30', '60', '120'], {
-    errorMap: () => ({ message: 'Please select a session duration' })
+    message: 'Please select a session duration'
   }),
-  date: z.date({
-    required_error: 'Please select a date',
-    invalid_type_error: 'Please select a valid date',
+  date: z.coerce.date({
+    message: 'Please select a valid date',
   }).refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
     message: 'Date cannot be in the past',
   }),
@@ -93,7 +92,7 @@ export const bookingFormSchema = z.object({
 export const bookingStatusUpdateSchema = z.object({
   bookingId: z.string().uuid('Invalid booking ID'),
   status: z.enum(['approved', 'rejected'], {
-    errorMap: () => ({ message: 'Status must be approved or rejected' })
+    message: 'Status must be approved or rejected'
   }),
   rejectionNote: z
     .string()

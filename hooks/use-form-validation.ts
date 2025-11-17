@@ -104,7 +104,7 @@ export function useFormValidation<T extends FieldValues>(
    */
   const isFieldTouched = useCallback(
     (fieldName: Path<T>): boolean => {
-      return !!form.formState.touchedFields[fieldName]
+      return !!(form.formState.touchedFields as any)[fieldName]
     },
     [form.formState.touchedFields]
   )
@@ -114,7 +114,7 @@ export function useFormValidation<T extends FieldValues>(
    */
   const isFieldDirty = useCallback(
     (fieldName: Path<T>): boolean => {
-      return !!form.formState.dirtyFields[fieldName]
+      return !!(form.formState.dirtyFields as any)[fieldName]
     },
     [form.formState.dirtyFields]
   )
@@ -166,7 +166,7 @@ export function useFieldValidator<T extends FieldValues>(
 ) {
   const [error, setError] = useState<string | undefined>()
   const [isValidating, setIsValidating] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   const validate = useCallback(
     async (value: any) => {
